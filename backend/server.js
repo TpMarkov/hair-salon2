@@ -9,6 +9,7 @@ const app = express()
 const port = process.env.PORT || 3000
 connectDB()
 connectCloudinary()
+console.log("Cloudinary connected successfully.")
 
 //  middlewares
 app.use(express.json())
