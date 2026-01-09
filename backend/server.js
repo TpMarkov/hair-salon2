@@ -3,6 +3,8 @@ import cors from "cors"
 import 'dotenv/config'
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
+import appointmentRouter from "./routes/appointment.route.js";
+
 
 //  app config
 const app = express()
@@ -19,6 +21,10 @@ app.use(cors())
 app.get("/", (req, res) => {
   res.send("Some changes")
 })
+
+// api endpoints
+app.use("/api/appointment", appointmentRouter)
+
 
 
 app.listen(port, () => {
