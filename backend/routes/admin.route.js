@@ -1,6 +1,8 @@
 import express from 'express';
-import {loginAdmin} from "../controllers/admin.controller.js";
+import { loginAdmin } from "../controllers/admin.controller.js";
 
 const adminRoute = express.Router()
 
-adminRoute.use("/login", loginAdmin);
+adminRoute.post("/login", loginAdmin);
+
+export default adminRoute;

@@ -4,11 +4,12 @@ import 'dotenv/config'
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
+import adminRouter from "./routes/admin.route.js";
 
 
 //  app config
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 connectDB()
 connectCloudinary()
 console.log("Cloudinary connected successfully.")
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 
 // api endpoints
 app.use("/api/appointment", appointmentRouter)
+app.use("/api/admin", adminRouter)
 
 
 
