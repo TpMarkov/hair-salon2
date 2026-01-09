@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/*Example of custom class*/
+@layer components {
+  .btn-primary {
+    border-radius: calc(infinity * 1px);
+    background-color: var(--color-violet-500);
+    padding-inline: --spacing(5);
+    padding-block: --spacing(2);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-violet-700);
+      }
+    }
+  }
+
+  .my-example {
+    background-color: red;
+  }
+}
+
+/* Custom CSS for this project */
+
+/*
+   Custom font for the logo
+*/
+@font-face {
+  font-family: "Logo-Font";
+  src: url("/fonts/pacifico-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: system-ui, sans-serif;
+}
+
+@layer utilities {
+  .logo-font {
+    font-family: "Logo-Font", sans-serif !important;
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    @apply bg-gradient-to-r from-amber-300 via-yellow-500 to-amber-700 bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .nav-bar {
+    @apply flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 p-5
+  }
+}
+
+@layer utilities {
+  .active hr {
+    @apply block
+  }
+}
+
+@theme {
+  --color-primary-start: #fcd34d;
+  /* amber-300 */
+  --color-primary-middle: #eab308;
+  /* yellow-500 */
+  --color-primary-end: #b45309;
+  /* amber-700 */
+}
+
+@layer utilities {
+  .bg-primary-gradient {
+    background-image: linear-gradient(to right,
+        var(--color-primary-start),
+        var(--color-primary-middle),
+        var(--color-primary-end));
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
