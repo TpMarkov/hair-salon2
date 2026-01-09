@@ -127,6 +127,15 @@ const Service = () => {
         getAvailableSlots()
         getAppointments()
         setSlotTime("")
+
+        // Trigger event for admin dashboard to refresh
+        localStorage.setItem('appointmentCreated', Date.now().toString())
+        window.dispatchEvent(new Event('appointmentCreated'))
+
+        // Clean up the localStorage after a short delay
+        setTimeout(() => {
+          localStorage.removeItem('appointmentCreated')
+        }, 1000)
       } else {
         toast.error(data.message)
       }
