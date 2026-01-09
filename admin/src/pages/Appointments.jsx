@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AdminContext } from '../context/AdminContext'
-import { RefreshCw } from 'lucide-react'
+import { RefreshCw, Wifi, WifiOff } from 'lucide-react'
 
 const Appointments = () => {
-    const { adminToken, appointments, getAllAppointments } = useContext(AdminContext)
+    const { adminToken, appointments, getAllAppointments, isConnected } = useContext(AdminContext)
     const [lastRefresh, setLastRefresh] = useState(new Date())
     const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -14,32 +14,6 @@ const Appointments = () => {
             setLastRefresh(new Date())
         }
     }, [adminToken])
-
-    // Listen for appointment creation events from frontend
-    useEffect(() => {
-        const handleStorageChange = (e) => {
-            // Check if the event is for new appointment
-            if (e.key === 'appointmentCreated' && e.newValue) {
-                console.log('New appointment detected, refreshing...')
-                handleRefresh()
-            }
-        }
-
-        // Listen for storage events (cross-tab communication)
-        window.addEventListener('storage', handleStorageChange)
-
-        // Also listen for custom event in same tab
-        const handleCustomEvent = () => {
-            console.log('New appointment detected (same tab), refreshing...')
-            handleRefresh()
-        }
-        window.addEventListener('appointmentCreated', handleCustomEvent)
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange)
-            window.removeEventListener('appointmentCreated', handleCustomEvent)
-        }
-    }, [])
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
@@ -62,7 +36,20 @@ const Appointments = () => {
                         <span>Refresh</span>
                     </button>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        {isConnected ? (
+                            <>
+                                <Wifi size={14} className="text-green-500" />
+                                <span className="text-green-600 font-medium">Live</span>
+                            </>
+                        ) : (
+                            <>
+                                <WifiOff size={14} className="text-red-500" />
+                                <span className="text-red-600 font-medium">Offline</span>
+                            </>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`}></div>
                         <span>Last updated: {lastRefresh.toLocaleTimeString()}</span>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from "react-toastify";
+import { io } from 'socket.io-client'
 
 export const AdminContext = createContext()
 
@@ -9,8 +10,43 @@ const AdminContextProvider = (props) => {
   const [adminToken, setAdminToken] = useState(localStorage.getItem('adminToken') ? localStorage.getItem('adminToken') : "")
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false)
   const [appointments, setAppointments] = useState([])
+  const [socket, setSocket] = useState(null)
+  const [isConnected, setIsConnected] = useState(false)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+  // Initialize Socket.IO connection
+  useEffect(() => {
+    const socketInstance = io(backendUrl, {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
+    })
+
+    socketInstance.on('connect', () => {
+      console.log('Socket.IO connected:', socketInstance.id)
+      setIsConnected(true)
+    })
+
+    socketInstance.on('disconnect', () => {
+      console.log('Socket.IO disconnected')
+      setIsConnected(false)
+    })
+
+    socketInstance.on('appointmentCreated', (data) => {
+      console.log('New appointment received:', data)
+      toast.info('New appointment created!')
+      getAllAppointments() // Refresh appointments list
+    })
+
+    setSocket(socketInstance)
+
+    // Cleanup on unmount
+    return () => {
+      socketInstance.disconnect()
+    }
+  }, [backendUrl])
 
   const getAllAppointments = async () => {
     try {
@@ -31,7 +67,8 @@ const AdminContextProvider = (props) => {
   const value = {
     adminToken, setAdminToken, backendUrl,
     sideBarCollapsed, setSideBarCollapsed,
-    appointments, getAllAppointments
+    appointments, getAllAppointments,
+    isConnected
   }
 
   return (
