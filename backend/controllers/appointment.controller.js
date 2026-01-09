@@ -27,4 +27,15 @@ const createAppointment = async (req, res) => {
   }
 }
 
-export { createAppointment }
+// API to get all appointments
+const getAllAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentModel.find({})
+    res.json({ success: true, appointments })
+  } catch (err) {
+    console.log(err)
+    res.json({ success: false, message: err.message })
+  }
+}
+
+export { createAppointment, getAllAppointments }
