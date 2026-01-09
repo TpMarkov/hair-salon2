@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+@theme {
+    --color-primary-start: #fcd34d;
+    /* amber-300 */
+    --color-primary-middle: #eab308;
+    /* yellow-500 */
+    --color-primary-end: #b45309;
+    /* amber-700 */
+    --color-primary: var(--color-primary-middle);
+}
+
+@layer components {
+
+    /* Dashboard Layout */
+    .admin-layout {
+        @apply flex flex-col md:flex-row min-h-screen bg-gray-50;
+    }
+
+    .admin-main-content {
+        @apply flex-1 w-full md:ml-64 transition-all duration-300;
+    }
+
+    /* Navigation (Sidebar on md+, Topbar on mobile) */
+    .admin-nav {
+        @apply fixed z-[58] bg-white border-gray-100 shadow-xl md:shadow-sm transition-all duration-300;
+
+        /* Mobile Topbar */
+        @apply top-0 left-0 w-72 h-full flex flex-col items-stretch border-r;
+
+        /* Desktop Sidebar */
+        @apply md:top-0 md:left-0 md:h-screen md:w-64 md:border-b-0 md:border-r;
+    }
+
+    .admin-nav.collapsed {
+        @apply md:w-20;
+    }
+
+    .admin-nav-inner {
+        @apply flex items-center justify-between w-full md:flex-col md:h-full md:py-8;
+    }
+
+    .admin-logo-container {
+        @apply flex items-center gap-2 md:flex-col md:px-4 transition-all duration-300;
+    }
+
+    .admin-nav.collapsed .admin-logo-container img {
+        @apply md:w-10;
+    }
+
+    .admin-nav.collapsed .admin-badge {
+        @apply md:hidden;
+    }
+
+    .admin-badge {
+        @apply px-2 py-0.5 border border-amber-200 bg-amber-50 text-amber-700 text-[9px] uppercase tracking-wider font-bold rounded-full md:mt-2;
+    }
+
+    .admin-nav-items {
+        @apply flex flex-col gap-1 mt-6 md:mt-10 flex-1 px-4;
+    }
+
+    .nav-item {
+        @apply flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 rounded-xl transition-all hover:bg-gray-100 hover:text-gray-900 overflow-hidden whitespace-nowrap;
+    }
+
+    .admin-nav.collapsed .nav-item {
+        @apply md:justify-center md:px-0;
+    }
+
+    .admin-nav.collapsed .nav-item span {
+        @apply md:hidden;
+    }
+
+    .nav-icon {
+        @apply w-5 h-5 transition-all duration-300 opacity-60 text-gray-400;
+    }
+
+    .nav-item.active .nav-icon {
+        @apply opacity-100 text-amber-600;
+    }
+
+    .nav-item:hover .nav-icon {
+        @apply opacity-100 text-gray-900;
+    }
+
+    .nav-item.active {
+        @apply bg-amber-50 text-amber-700;
+    }
+
+    .btn-logout {
+        @apply mt-auto flex items-center gap-3 px-5 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-white hover:text-gray-900 hover:border-gray-900 border border-transparent transition-all duration-300 md:mx-6 md:mb-8;
+    }
+
+    .btn-logout svg {
+        @apply w-4 h-4 text-white transition-colors duration-300;
+    }
+
+    .btn-logout:hover svg {
+        @apply text-gray-900;
+    }
+
+    .admin-nav.collapsed .btn-logout {
+        @apply md:px-0 md:w-12 md:h-12 md:mx-auto md:flex md:items-center md:justify-center md:rounded-full;
+    }
+
+    .admin-nav.collapsed .btn-logout span {
+        @apply md:hidden;
+    }
+
+    /* Mobile enhancements */
+    @media (max-width: 767px) {
+        .btn-logout {
+            @apply bg-transparent text-gray-900 border-gray-200 px-3 py-2;
+        }
+
+        .btn-logout svg {
+            @apply text-gray-900;
+        }
+    }
+
+    /* Transition helpers */
+    .transition-sidebar {
+        transition: width 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+    }
+}
