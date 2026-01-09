@@ -69,7 +69,7 @@ const Navbar = () => {
         </ul>
         <div className="flex items-center gap-4">
           {token ? <div className={"flex items-center gap-1 cursor-pointer group relative"}>
-                <img src={`/images/12.jpg`} alt={"user-image"}
+                <img src={`/images/golden_avatar.png`} alt={"user-image"}
                      className={"w-10 rounded-full "}
                 />
                 <ChevronDown className="hidden md:block"/>

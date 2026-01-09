@@ -5,7 +5,7 @@ import {User, Mail, Phone, Edit2, Check, Camera} from 'lucide-react'
 const MyProfile = () => {
   const [userData, setUserData] = useState({
     name: "Tsvetan Markov",
-    image: "/images/12.jpg",
+    image: "/images/golden_avatar.png",
     email: "markowcvetan@gmail.com",
     phone: "+359 881 234 567",
   })
