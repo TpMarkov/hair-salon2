@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const ServicesList = () => {
 
-  const { aToken, backendUrl } = useContext(AdminContext)
+  const { adminToken, backendUrl } = useContext(AdminContext)
 
   const [serviceImg, setServiceImg] = useState(false)
   const [type, setType] = useState('')
@@ -33,7 +33,7 @@ const ServicesList = () => {
       formData.append('description', description)
       formData.append('filter', filter)
 
-      const { data } = await axios.post(backendUrl + '/api/service/add-service', formData, { headers: { adminToken: aToken } })
+      const { data } = await axios.post(backendUrl + '/api/service/add-service', formData, { headers: { adminToken } })
 
       if (data.success) {
         toast.success(data.message)
@@ -60,7 +60,7 @@ const ServicesList = () => {
       <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll scrollbar-hide">
         <div className="flex items-center gap-4 mb-8 text-gray-500">
           <label htmlFor="service-image">
-            <img className="w-16 bg-gray-100 rounded-full cursor-pointer" src={serviceImg ? URL.createObjectURL(serviceImg) : assets.upload_area} alt="upload-area" />
+            <img className="w-16 bg-transparent rounded-full cursor-pointer" src={serviceImg ? URL.createObjectURL(serviceImg) : "/images/image-dropzone.png"} alt="upload-area" />
           </label>
           <input onChange={(e) => setServiceImg(e.target.files[0])} type="file" id="service-image" hidden />
           <p>Upload service image</p>
