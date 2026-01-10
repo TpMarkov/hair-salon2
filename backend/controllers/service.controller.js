@@ -47,4 +47,34 @@ const addService = async (req, res) => {
     }
 }
 
-export { addService }
+// API for listing all services
+const listServices = async (req, res) => {
+    try {
+        const services = await serviceModel.find({})
+        res.json({ success: true, services })
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// API for removing service
+const removeService = async (req, res) => {
+    try {
+        const { id } = req.body
+        const service = await serviceModel.findById(id)
+
+        if (!service) {
+            return res.json({ success: false, message: "Service not found" })
+        }
+
+        await serviceModel.findByIdAndDelete(id)
+        res.json({ success: true, message: "Service Deleted" })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+export { addService, listServices, removeService }

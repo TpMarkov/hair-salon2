@@ -64,17 +64,34 @@ const AdminContextProvider = (props) => {
   }
 
 
+  // Services state and fetch function
+  const [services, setServices] = useState([])
+
+  const getAllServices = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + '/api/service/list')
+      if (data.success) {
+        setServices(data.services)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   const value = {
     adminToken, setAdminToken, backendUrl,
     sideBarCollapsed, setSideBarCollapsed,
     appointments, getAllAppointments,
-    isConnected
+    isConnected,
+    services, getAllServices
   }
 
   return (
-    <AdminContext.Provider value={value}>
+    <AdminContext.Provider value={value} >
       {props.children}
-    </AdminContext.Provider>
+    </AdminContext.Provider >
   )
 
 }
