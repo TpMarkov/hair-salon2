@@ -7,6 +7,7 @@ import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
 import adminRouter from "./routes/admin.route.js";
+import serviceRouter from "./routes/service.route.js";
 
 
 //  app config
@@ -50,6 +51,7 @@ app.get("/", (req, res) => {
 // api endpoints
 app.use("/api/appointment", appointmentRouter)
 app.use("/api/admin", adminRouter)
+app.use("/api/service", serviceRouter)
 
 
 
