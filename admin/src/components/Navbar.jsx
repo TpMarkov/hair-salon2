@@ -86,7 +86,7 @@ const Navbar = () => {
             {/* Logout Button */}
             <button onClick={logout} className="btn-logout mt-auto mb-6 md:mb-8">
               <LogOut className="w-4 h-4"/>
-              <span>Изход</span>
+              <span>Logout</span>
             </button>
           </div>
         </nav>

@@ -88,7 +88,7 @@ const Services = () => {
                   <button
                       key={i}
                       onClick={() => paginate(i + 1)}
-                      className={`w-8 h-8 rounded border ${currentPage === i + 1 ? 'bg-indigo-500 text-white' : 'hover:bg-gray-100'}`}
+                      className={`w-8 h-8 rounded border ${currentPage === i + 1 ? 'bg-yellow-500 text-white' : 'hover:bg-gray-100'}`}
                   >
                     {i + 1}
                   </button>
