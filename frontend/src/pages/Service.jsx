@@ -1,4 +1,3 @@
-import { services } from "../assets/assets.js"
 import { ChevronRight, Calendar, Clock, ChevronLeft } from "lucide-react"
 import { useContext, useState, useRef, useEffect } from "react"
 import { AppContext } from "../context/AppContext.jsx"
@@ -13,7 +12,7 @@ const Service = () => {
   const [slotTime, setSlotTime] = useState("")
   const daysOfWeek = ["Нед", "Пон", "Вто", "Сря", "Чет", "Пет", "Съб",]
 
-  const { backendUrl, getAppointments } = useContext(AppContext)
+  const { backendUrl, getAppointments, services } = useContext(AppContext)
 
 
   const daysRef = useRef(null)

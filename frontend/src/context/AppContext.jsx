@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from 'react'
-import { services } from "../assets/assets.js";
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
@@ -9,6 +8,8 @@ const AppContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
   const [appointments, setAppointments] = useState([])
+  const [services, setServices] = useState([])
+
 
   const getAppointments = async () => {
     try {
@@ -24,7 +25,22 @@ const AppContextProvider = (props) => {
     }
   }
 
+  const getServicesData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + '/api/service/list')
+      if (data.success) {
+        setServices(data.services)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
   useEffect(() => {
+    getServicesData()
     getAppointments()
   }, [])
 
