@@ -23,6 +23,8 @@ const allowedOrigins = [
   process.env.ADMIN_URL
 ].filter(Boolean); // Remove undefined/null values
 
+console.log("Allowed Origins:", allowedOrigins);
+
 // Create HTTP server
 const httpServer = createServer(app)
 
@@ -44,20 +46,28 @@ io.on('connection', (socket) => {
   })
 })
 
-connectDB()
-connectCloudinary()
-console.log("Cloudinary connected successfully.")
 
 //  middlewares
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    console.log("Incoming Request Origin:", origin);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json())
 
 // Api test
 app.get("/", (req, res) => {
-  res.send("Some changes")
+  res.send("Backend is runing. Allowed Origins: " + JSON.stringify(allowedOrigins));
 })
 
 // api endpoints
@@ -66,8 +76,34 @@ app.use("/api/admin", adminRouter)
 app.use("/api/service", serviceRouter)
 app.use("/api/user", userRouter)
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error("Global Error Handler:", err.stack);
+  res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
+});
 
-httpServer.listen(port, () => {
-  console.log("Server running on port: " + port)
-  console.log("Socket.IO server initialized")
-})
+// Startup function
+const startServer = async () => {
+  try {
+    await connectDB();
+    await connectCloudinary();
+    console.log("Database and Cloudinary connected successfully.");
+
+    // Only listen if not running in Vercel environment (Vercel handles the port binding)
+    // OR if we want to run locally
+    if (process.env.NODE_ENV !== 'production') {
+      httpServer.listen(port, () => {
+        console.log("Server running on port: " + port)
+        console.log("Socket.IO server initialized")
+      })
+    }
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
+
+// Export the app for Vercel
+export default httpServer;
