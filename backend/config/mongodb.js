@@ -13,22 +13,26 @@
 
 import mongoose from "mongoose";
 
+import mongoose from "mongoose";
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = {conn: null, promise: null};
+}
+
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
-    return;
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, {
+      bufferCommands: false,
+    }).then((mongoose) => mongoose);
   }
 
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("MongoDB connected ✅");
-  } catch (err) {
-    console.error("MongoDB connection failed ❌", err);
-    throw err; // let the request fail naturally
-  }
-
-  mongoose.connection.on("disconnected", () => {
-    console.log("MongoDB disconnected ⚠️");
-  });
+  cached.conn = await cached.promise;
+  console.log("MongoDB connected ✅");
+  return cached.conn;
 };
 
 export default connectDB;

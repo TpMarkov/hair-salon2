@@ -1,14 +1,16 @@
 import appointmentModel from "../models/appointment.model.js";
-import { io } from "../server.js";
+import {io} from "../server.js";
+import connectDB from "../config/mongodb.js";
 
 // API for create new appointment
 const createAppointment = async (req, res) => {
+  await connectDB();
   try {
-    const { serviceData, slotDate, slotTime } = req.body
+    const {serviceData, slotDate, slotTime} = req.body
     const userId = req.userId
 
     if (!serviceData || !slotDate || !slotTime) {
-      return res.json({ success: false, message: "Missing Details" })
+      return res.json({success: false, message: "Missing Details"})
     }
 
     const appointmentData = {
@@ -29,22 +31,23 @@ const createAppointment = async (req, res) => {
     })
     console.log('Socket.IO event emitted: appointmentCreated')
 
-    res.json({ success: true, message: "Appointment Booked" })
+    res.json({success: true, message: "Appointment Booked"})
 
   } catch (err) {
     console.log(err)
-    res.json({ success: false, message: err.message })
+    res.json({success: false, message: err.message})
   }
 }
 
 // API to get all appointments (Admin)
 const getAllAppointments = async (req, res) => {
+  await connectDB();
   try {
     const appointments = await appointmentModel.find({})
-    res.json({ success: true, appointments })
+    res.json({success: true, appointments})
   } catch (err) {
     console.log(err)
-    res.json({ success: false, message: err.message })
+    res.json({success: false, message: err.message})
   }
 }
 
@@ -52,27 +55,28 @@ const getAllAppointments = async (req, res) => {
 const userAppointments = async (req, res) => {
   try {
     const userId = req.userId
-    const appointments = await appointmentModel.find({ userId })
-    res.json({ success: true, appointments })
+    const appointments = await appointmentModel.find({userId})
+    res.json({success: true, appointments})
   } catch (err) {
     console.log(err)
-    res.json({ success: false, message: err.message })
+    res.json({success: false, message: err.message})
   }
 }
 
 // API to cancel appointment
 const cancelAppointment = async (req, res) => {
+  await connectDB();
   try {
-    const { appointmentId } = req.body
+    const {appointmentId} = req.body
     const userId = req.userId
 
     const appointment = await appointmentModel.findById(appointmentId)
 
     if (appointment.userId !== userId) {
-      return res.json({ success: false, message: "Unauthorized action" })
+      return res.json({success: false, message: "Unauthorized action"})
     }
 
-    await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+    await appointmentModel.findByIdAndUpdate(appointmentId, {cancelled: true})
 
     // Emit Socket.IO event to notify admin dashboard
     io.emit('appointmentCancelled', {
@@ -80,12 +84,12 @@ const cancelAppointment = async (req, res) => {
       timestamp: Date.now()
     })
 
-    res.json({ success: true, message: "Appointment Cancelled" })
+    res.json({success: true, message: "Appointment Cancelled"})
 
   } catch (error) {
     console.log(error)
-    res.json({ success: false, message: error.message })
+    res.json({success: false, message: error.message})
   }
 }
 
-export { createAppointment, getAllAppointments, userAppointments, cancelAppointment }
+export {createAppointment, getAllAppointments, userAppointments, cancelAppointment}
