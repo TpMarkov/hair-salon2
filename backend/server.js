@@ -161,8 +161,9 @@ app.get("/api/health", (req, res) => {
 })
 
 // Ensure DB connection for API routes (serverless-safe)
+// Express 5 requires different pattern syntax - use regex or proper parameter
 if (isServerless) {
-  app.use("/api/*", ensureDBConnection)
+  app.use(/^\/api\//, ensureDBConnection)
 }
 
 // api endpoints
