@@ -35,33 +35,24 @@ const AdminContextProvider = (props) => {
     if (!backendUrl) return
 
     // Check if we're in production/serverless environment
-    // const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
+    const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
 
-    // if (isProduction) {
-    //   // In serverless/production, Socket.IO doesn't work - skip connection silently
-    //   console.log('Socket.IO disabled in serverless environment')
-    //   return
-    // }
+    if (isProduction) {
+      // In serverless/production, Socket.IO doesn't work - skip connection silently
+      console.log('Socket.IO disabled in serverless environment')
+      return
+    }
 
     // Only connect in local development
-    // const socketInstance = io(backendUrl, {
-    //   transports: ['websocket', 'polling'],
-    //   reconnection: true,
-    //   reconnectionAttempts: 3,
-    //   reconnectionDelay: 1000,
-    //   timeout: 5000,
-    //   autoConnect: true
-    // })
-
-    // connect in productionm
     const socketInstance = io(backendUrl, {
       transports: ['websocket', 'polling'],
       reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 2000,
-      timeout: 10000,
-      autoConnect: true,
-    });
+      reconnectionAttempts: 3,
+      reconnectionDelay: 1000,
+      timeout: 5000,
+      autoConnect: true
+    })
+
 
     socketInstance.on('connect', () => {
       console.log('Socket.IO connected:', socketInstance.id)
