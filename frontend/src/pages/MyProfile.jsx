@@ -90,9 +90,16 @@ const MyProfile = () => {
             >
               <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-gray-100">
                 <img
-                  src={image ? URL.createObjectURL(image) : userData.image}
+                  src={
+                    image
+                      ? URL.createObjectURL(image)
+                      : userData?.image || "/images/golden_avatar.png"
+                  }
                   alt="Profile"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/golden_avatar.png";
+                  }}
                 />
               </div>
               {isEdit && (

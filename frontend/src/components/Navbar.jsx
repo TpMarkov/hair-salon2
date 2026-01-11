@@ -77,8 +77,13 @@ const Navbar = () => {
       </ul>
       <div className="flex items-center gap-4">
         {token && userData ? <div className={"flex items-center gap-1 cursor-pointer group relative"}>
-          <img src={userData.image ? userData.image : "/images/golden_avatar.png"} alt={"user-image"}
-            className={"w-10 rounded-full "}
+          <img
+            src={userData?.image || "/images/golden_avatar.png"}
+            alt="user-image"
+            className="w-10 rounded-full"
+            onError={(e) => {
+              e.currentTarget.src = "/images/golden_avatar.png";
+            }}
           />
           <ChevronDown className="hidden md:block" />
           <div
