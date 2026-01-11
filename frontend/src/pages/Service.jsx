@@ -129,6 +129,7 @@ const Service = () => {
 
       if (data.success) {
         toast.success(data.message)
+        navigate("/my-appointments")
         getAvailableSlots()
         getAppointments()
         setSlotTime("")
