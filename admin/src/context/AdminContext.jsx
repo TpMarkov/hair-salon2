@@ -43,6 +43,8 @@ const AdminContextProvider = (props) => {
       return
     }
 
+
+    // TODO: Find a way to update appointments withoud using sockets or use sockets for production
     // Only connect in local development
     const socketInstance = io(backendUrl, {
       transports: ['websocket', 'polling'],
