@@ -35,7 +35,9 @@ const MyProfile = () => {
       const { data } = await axios.post(backendUrl + '/api/user/update-profile', formData, { headers: { token } })
 
       if (data.success) {
-        toast.success(data.message)
+        toast.success(data.message, {
+          position: "bottom-right"
+        })
         await loadUserProfileData()
         setIsEdit(false)
         setImage(false)
