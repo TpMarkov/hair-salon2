@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { Eye, EyeOff } from 'lucide-react'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { AppContext } from '../context/AppContext'
 
 const Login = () => {
   const [state, setState] = useState("Sign Up")
@@ -9,11 +12,13 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const { backendUrl, token, setToken } = useContext(AppContext)
 
   const sectionRef = useRef(null)
   const formRef = useRef(null)
   const imageRef = useRef(null)
   const navigate = useNavigate()
+
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -35,14 +40,48 @@ const Login = () => {
     return () => ctx.revert()
   }, [])
 
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+  }, [token, navigate])
+
   const onSubmit = async (event) => {
     event.preventDefault()
-    // Implementation will be added later as requested
+
+    try {
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        if (data.success) {
+          localStorage.setItem('token', data.token)
+          setToken(data.token)
+          toast.success("Успешна регистрация!")
+          navigate('/')
+        } else {
+          toast.error(data.message)
+        }
+      } else {
+        const { data } = await axios.post(backendUrl + '/api/user/login', { email, password })
+        if (data.success) {
+          localStorage.setItem('token', data.token)
+          setToken(data.token)
+          toast.success("Успешен вход!")
+          navigate('/')
+        } else {
+          toast.error(data.message)
+        }
+      }
+
+    } catch (err) {
+      toast.error(err.message)
+    }
   }
 
   return (
-    <div ref={sectionRef} className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-3xl shadow-2xl border border-gray-100">
+    <div ref={sectionRef}
+      className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+      <div
+        className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-3xl shadow-2xl border border-gray-100">
 
         {/* Left Side: Image (Hidden on mobile) */}
         <div ref={imageRef} className="hidden lg:block relative h-full min-h-[600px]">

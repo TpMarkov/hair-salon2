@@ -9,6 +9,7 @@ const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
   const [appointments, setAppointments] = useState([])
   const [services, setServices] = useState([])
+  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
 
 
   const getAppointments = async () => {
@@ -48,7 +49,8 @@ const AppContextProvider = (props) => {
     services,
     backendUrl,
     appointments,
-    getAppointments
+    getAppointments,
+    token, setToken
   }
 
   return (

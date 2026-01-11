@@ -16,6 +16,7 @@ const Contact = () => {
   useEffect(() => {
     const mm = gsap.matchMedia();
 
+
     mm.add({
       isDesktop: "(min-width: 1024px)",
       isMobile: "(max-width: 1023px)"
@@ -70,6 +71,9 @@ const Contact = () => {
         delay: 0.4
       });
     }, sectionRef);
+
+    window.scrollTo(0, 0);
+
 
     return () => mm.revert();
   }, []);

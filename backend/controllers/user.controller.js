@@ -1,26 +1,31 @@
 import validator from "validator"
 import bcrypt from "bcrypt"
-import {userModel} from "../models/user.model.js";
+import { userModel } from "../models/user.model.js";
 import jwt from "jsonwebtoken"
 
 //  Register user
 const registerUser = async (req, res) => {
-
   try {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.json({success: false, message: "Всички полета са задължителни"})
+      return res.json({ success: false, message: "Всички полета са задължителни" })
+    }
+
+    // Check if user already exists
+    const exists = await userModel.findOne({ email });
+    if (exists) {
+      return res.json({ success: false, message: "Потребител с този имейл вече съществува" });
     }
 
     //  Validating email address
     if (!validator.isEmail(email)) {
-      return res.json({success: false, message: "Моля въведете валиден е-адрес."})
+      return res.json({ success: false, message: "Моля въведете валиден е-адрес" })
     }
 
     //  Validate strong password
     if (password.length < 8) {
-      return res.json({success: false, message: "Паролата трябва да е поне 8 символа"})
+      return res.json({ success: false, message: "Паролата трябва да е поне 8 символа" })
     }
 
     //  Hashing user password
@@ -37,41 +42,41 @@ const registerUser = async (req, res) => {
     const user = await newUser.save()
 
     // create token using the _id
-    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-    res.json({success: true, token})
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+    res.json({ success: true, token })
 
   } catch (err) {
     console.log(err)
-    return res.json({success: false, message: err.message})
+    return res.json({ success: false, message: err.message })
   }
 }
 
 const loginUser = async (req, res) => {
 
   try {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
     if (!email || !password) {
-      return res.json({success: false, message: "Всички полета са задължителни"})
+      return res.json({ success: false, message: "Всички полета са задължителни" })
     }
 
-    const user = await userModel.findOne({email})
+    const user = await userModel.findOne({ email })
 
     if (!user) {
-      return res.json({success: false, message: "Невалидни входни данни"})
+      return res.json({ success: false, message: "Невалидни входни данни" })
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (isMatch) {
-      const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-      res.json({success: true, token})
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+      res.json({ success: true, token })
     } else {
-      res.json({success: false, message: "Грешна парола"})
+      return res.json({ success: false, message: "Грешна парола" })
     }
 
   } catch (err) {
     console.log(err)
-    return res.json({success: false, message: err.message})
+    return res.json({ success: false, message: err.message })
   }
 
 }
