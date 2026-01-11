@@ -53,12 +53,16 @@ const connectDB = async () => {
 
     // Connection options optimized for serverless
     const options = {
-      serverSelectionTimeoutMS: 10000, // Timeout after 10s
+      serverSelectionTimeoutMS: 30000, // Increased to 30s for serverless (network latency)
+      connectTimeoutMS: 30000, // Connection timeout
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
       maxPoolSize: 1, // Maintain up to 1 socket connection for serverless
       minPoolSize: 0, // Allow 0 connections when idle (better for serverless)
       retryWrites: true,
-      w: 'majority'
+      w: 'majority',
+      // Buffer commands until connection is established
+      bufferCommands: true,
+      bufferMaxEntries: 0 // Disable mongoose buffering - throw errors immediately
     }
 
     await mongoose.connect(`${process.env.MONGODB_URI}/hair-salon`, options)

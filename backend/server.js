@@ -100,16 +100,31 @@ const ensureDBConnection = async (req, res, next) => {
   // Start connection
   isConnecting = true
   try {
-    await connectDB()
+    // Set a longer timeout for serverless connections
+    const connectionPromise = connectDB()
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Database connection timeout after 25 seconds")), 25000)
+    })
+    
+    await Promise.race([connectionPromise, timeoutPromise])
     connectCloudinary() // Synchronous config
     dbConnected = true
     isConnecting = false
     next()
   } catch (error) {
     isConnecting = false
-    console.error("Database connection failed:", error)
-    // Don't block - let the route handler deal with it
-    // Some routes might work without DB (health check, etc.)
+    console.error("Database connection failed:", error.message)
+    console.error("Full error:", error)
+    // Return error response instead of silently proceeding
+    // This helps debug connection issues
+    if (error.message.includes("timeout") || error.message.includes("ECONNREFUSED") || error.message.includes("ENOTFOUND")) {
+      return res.status(503).json({ 
+        success: false, 
+        message: "Database connection failed. Please check MongoDB configuration.",
+        error: process.env.NODE_ENV === 'production' ? "Service temporarily unavailable" : error.message
+      })
+    }
+    // For other errors, still proceed but log them
     next()
   }
 }
