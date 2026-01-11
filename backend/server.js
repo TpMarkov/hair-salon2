@@ -12,15 +12,6 @@ import userRouter from "./routes/user.route.js";
 
 
 //  app config
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
 
 const app = express()
 const port = process.env.PORT || 4000
