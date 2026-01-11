@@ -1,8 +1,14 @@
 import React from 'react'
 import {ChevronRight} from 'lucide-react';
 import Service from "../pages/Service.jsx";
+import {AppContext} from "../context/AppContext.jsx";
+import {useContext} from "react";
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
+  const {userData} = useContext(AppContext);
+  const navigate = useNavigate();
+
   return (
       <div className="relative h-[500px] md:h-[600px] lg:h-[700px] w-full overflow-hidden rounded-2xl shadow-2xl">
         {/* Background Image */}
@@ -26,13 +32,16 @@ const Header = () => {
             Вашата красота е нашата мисия.
           </p>
 
-          <a
+          {userData ? <a
               href="#services"
               className="group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
           >
             Запазете своя час
             <ChevronRight className="group-hover:translate-x-1 transition-transform" size={24}/>
-          </a>
+          </a> : <button onClick={() => navigate("/login")}
+                         className={"group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"}>Регистрирай
+            се</button>}
+
         </div>
       </div>
   )

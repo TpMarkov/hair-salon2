@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {UserPlus} from 'lucide-react'
+import {AppContext} from "../context/AppContext.jsx";
 
 const Banner = () => {
   const navigate = useNavigate()
+  const {userData} = useContext(AppContext)
 
   return (
       <div
@@ -24,13 +26,14 @@ const Banner = () => {
                 Присъедини се към нашите доволни клиенти и се възползвай от професионална грижа за твоята коса.
               </p>
 
-              <button
+              {!userData && (<button
                   onClick={() => navigate('/login')}
                   className="group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95 cursor-pointer"
               >
                 <UserPlus size={24}/>
                 Създай профил
-              </button>
+              </button>)}
+
             </div>
           </div>
 
