@@ -18,15 +18,20 @@ const ServicesList = () => {
       : [...services].reverse().filter(item => item.filter.toLowerCase() === activeFilter.toLowerCase())
 
   useGSAP(() => {
-    gsap.from(".service-card", {
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power3.out",
-      clearProps: "all"
-    })
-  }, {scope: containerRef, dependencies: [activeFilter]})
+    // Only animate if service cards exist in the DOM
+    const serviceCards = containerRef.current?.querySelectorAll(".service-card")
+    
+    if (serviceCards && serviceCards.length > 0) {
+      gsap.from(".service-card", {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
+        clearProps: "all"
+      })
+    }
+  }, {scope: containerRef, dependencies: [activeFilter, filteredServices]})
 
   const filters = ["Всички", "Мъжко", "Дамско", "Детско"]
 

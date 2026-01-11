@@ -94,6 +94,16 @@ curl https://hair-salon-backend-beta.vercel.app/api/service/list
 - Verify IP whitelist includes `0.0.0.0/0`
 - Check `MONGODB_URI` environment variable is set correctly
 - Ensure database user credentials are correct
+- Make sure your MongoDB connection string format is correct: `mongodb+srv://username:password@cluster.mongodb.net`
+- Verify you're not blocking the connection with firewall rules
+
+### Issue: "Operation buffering timed out after 10000ms"
+**Solution**:
+- This means MongoDB connection is failing - check the above solutions
+- Verify `MONGODB_URI` is correctly set in Vercel environment variables
+- Check MongoDB Atlas Network Access allows `0.0.0.0/0`
+- Verify database user has proper permissions
+- Check Vercel function logs for specific MongoDB connection errors
 
 ### Issue: CORS errors
 **Solution**:
