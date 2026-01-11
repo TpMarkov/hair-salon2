@@ -39,13 +39,24 @@ export const io = new Server(httpServer, {
 })
 
 // Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id)
+// io.on('connection', (socket) => {
+//   console.log('Client connected:', socket.id)
+//
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected:', socket.id)
+//   })
+// })
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id)
-  })
-})
+// connection in production
+const server = http.createServer(app);
+
+io.on('connection', (socket) => {
+  console.log('Admin connected:', socket.id);
+});
+
+server.listen(process.env.PORT || 4000, () => {
+  console.log('Server running');
+});
 
 
 //  middlewares

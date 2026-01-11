@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react'
+import React, {createContext, useState, useEffect, useCallback} from 'react'
 import axios from 'axios'
-import { toast } from "react-toastify";
-import { io } from 'socket.io-client'
+import {toast} from "react-toastify";
+import {io} from 'socket.io-client'
 
 export const AdminContext = createContext()
 
@@ -17,7 +17,7 @@ const AdminContextProvider = (props) => {
   const getAllAppointments = useCallback(async () => {
     if (!backendUrl) return
     try {
-      const { data } = await axios.get(`${backendUrl}/api/appointment/list`)
+      const {data} = await axios.get(`${backendUrl}/api/appointment/list`)
       if (data.success) {
         setAppointments(data.appointments.reverse())
         console.log(data.appointments)
@@ -35,23 +35,33 @@ const AdminContextProvider = (props) => {
     if (!backendUrl) return
 
     // Check if we're in production/serverless environment
-    const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
-    
-    if (isProduction) {
-      // In serverless/production, Socket.IO doesn't work - skip connection silently
-      console.log('Socket.IO disabled in serverless environment')
-      return
-    }
+    // const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
+
+    // if (isProduction) {
+    //   // In serverless/production, Socket.IO doesn't work - skip connection silently
+    //   console.log('Socket.IO disabled in serverless environment')
+    //   return
+    // }
 
     // Only connect in local development
+    // const socketInstance = io(backendUrl, {
+    //   transports: ['websocket', 'polling'],
+    //   reconnection: true,
+    //   reconnectionAttempts: 3,
+    //   reconnectionDelay: 1000,
+    //   timeout: 5000,
+    //   autoConnect: true
+    // })
+
+    // connect in productionm
     const socketInstance = io(backendUrl, {
       transports: ['websocket', 'polling'],
       reconnection: true,
-      reconnectionAttempts: 3,
-      reconnectionDelay: 1000,
-      timeout: 5000,
-      autoConnect: true
-    })
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+      timeout: 10000,
+      autoConnect: true,
+    });
 
     socketInstance.on('connect', () => {
       console.log('Socket.IO connected:', socketInstance.id)
@@ -95,7 +105,7 @@ const AdminContextProvider = (props) => {
 
   const getAllServices = async () => {
     try {
-      const { data } = await axios.get(backendUrl + '/api/service/list')
+      const {data} = await axios.get(backendUrl + '/api/service/list')
       if (data.success) {
         setServices(data.services)
       } else {
@@ -115,9 +125,9 @@ const AdminContextProvider = (props) => {
   }
 
   return (
-    <AdminContext.Provider value={value} >
-      {props.children}
-    </AdminContext.Provider >
+      <AdminContext.Provider value={value}>
+        {props.children}
+      </AdminContext.Provider>
   )
 
 }
