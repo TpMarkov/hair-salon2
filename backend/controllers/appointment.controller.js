@@ -5,12 +5,14 @@ import { io } from "../server.js";
 const createAppointment = async (req, res) => {
   try {
     const { serviceData, slotDate, slotTime } = req.body
+    const userId = req.userId
 
     if (!serviceData || !slotDate || !slotTime) {
       return res.json({ success: false, message: "Missing Details" })
     }
 
     const appointmentData = {
+      userId,
       serviceData,
       slotDate,
       slotTime,
@@ -35,7 +37,7 @@ const createAppointment = async (req, res) => {
   }
 }
 
-// API to get all appointments
+// API to get all appointments (Admin)
 const getAllAppointments = async (req, res) => {
   try {
     const appointments = await appointmentModel.find({})
@@ -46,4 +48,16 @@ const getAllAppointments = async (req, res) => {
   }
 }
 
-export { createAppointment, getAllAppointments }
+// API to get user appointments
+const userAppointments = async (req, res) => {
+  try {
+    const userId = req.userId
+    const appointments = await appointmentModel.find({ userId })
+    res.json({ success: true, appointments })
+  } catch (err) {
+    console.log(err)
+    res.json({ success: false, message: err.message })
+  }
+}
+
+export { createAppointment, getAllAppointments, userAppointments }

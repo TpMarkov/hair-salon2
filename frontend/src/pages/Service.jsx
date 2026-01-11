@@ -3,16 +3,17 @@ import { useContext, useState, useRef, useEffect } from "react"
 import { AppContext } from "../context/AppContext.jsx"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 
 const Service = () => {
+  const navigate = useNavigate()
   const [serviceSlots, setServiceSlots] = useState([])
   const [slotIndex, setSlotIndex] = useState(0)
   const [slotTime, setSlotTime] = useState("")
   const daysOfWeek = ["Нед", "Пон", "Вто", "Сря", "Чет", "Пет", "Съб",]
 
-  const { backendUrl, getAppointments, services } = useContext(AppContext)
+  const { backendUrl, getAppointments, services, token } = useContext(AppContext)
 
 
   const daysRef = useRef(null)
@@ -103,6 +104,11 @@ const Service = () => {
 
   const bookAppointment = async () => {
     try {
+      if (!token) {
+        toast.warn("Моля, влезте в профила си, за да запазите час")
+        return navigate('/login')
+      }
+
       if (!slotTime) {
         return toast.warn("Моля, изберете час")
       }
@@ -119,7 +125,7 @@ const Service = () => {
         serviceData: service,
         slotDate,
         slotTime
-      })
+      }, { headers: { token } })
 
       if (data.success) {
         toast.success(data.message)

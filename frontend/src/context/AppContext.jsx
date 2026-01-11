@@ -15,7 +15,12 @@ const AppContextProvider = (props) => {
 
   const getAppointments = async () => {
     try {
-      const { data } = await axios.get(backendUrl + '/api/appointment/list')
+
+      if (!token) {
+        return setAppointments([])
+      }
+
+      const { data } = await axios.get(backendUrl + '/api/appointment/my-appointments', { headers: { token } })
       if (data.success) {
         setAppointments(data.appointments.reverse())
       } else {
@@ -58,14 +63,15 @@ const AppContextProvider = (props) => {
 
   useEffect(() => {
     getServicesData()
-    getAppointments()
   }, [])
 
   useEffect(() => {
     if (token) {
       loadUserProfileData()
+      getAppointments()
     } else {
       setUserData(false)
+      setAppointments([])
     }
   }, [token])
 
