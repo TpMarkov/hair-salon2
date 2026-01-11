@@ -3,6 +3,7 @@ import cors from "cors"
 import 'dotenv/config'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
+import mongoose from "mongoose"
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
@@ -10,65 +11,147 @@ import adminRouter from "./routes/admin.route.js";
 import serviceRouter from "./routes/service.route.js";
 import userRouter from "./routes/user.route.js";
 
+// Check if running in serverless environment (Vercel)
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
 
 //  app config
 const app = express()
 const port = process.env.PORT || 4000
 
-// Allowed origins
+// Allowed origins - include frontend and admin URLs
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   process.env.FRONTEND_URL,
-  process.env.ADMIN_URL
+  process.env.ADMIN_URL,
+  "https://hair-salon2-frontend.vercel.app", // Hardcoded for now, ideally use env var
 ].filter(Boolean); // Remove undefined/null values
 
 console.log("Allowed Origins:", allowedOrigins);
 
-// Create HTTP server
-const httpServer = createServer(app)
+// Create HTTP server only for local development (Socket.IO needs it)
+let httpServer = null
+let io = null
 
-// Initialize Socket.IO with CORS
-export const io = new Server(httpServer, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-})
-
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id)
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id)
+if (!isServerless) {
+  httpServer = createServer(app)
+  io = new Server(httpServer, {
+    cors: {
+      origin: allowedOrigins,
+      methods: ["GET", "POST"],
+      credentials: true
+    }
   })
-})
 
+  io.on('connection', (socket) => {
+    console.log('Client connected:', socket.id)
+    socket.on('disconnect', () => {
+      console.log('Client disconnected:', socket.id)
+    })
+  })
+}
+
+export { io }
+
+// Connection state for serverless
+let dbConnected = false
+let isConnecting = false
+
+// Lazy database connection middleware for serverless
+const ensureDBConnection = async (req, res, next) => {
+  // If already connected, proceed
+  if (mongoose.connection.readyState === 1) {
+    dbConnected = true
+    return next()
+  }
+
+  // If connection is in progress, wait for it (with timeout)
+  if (isConnecting) {
+    const maxWait = 10000 // 10 seconds max wait
+    const startTime = Date.now()
+    await new Promise((resolve) => {
+      const checkConnection = () => {
+        if (mongoose.connection.readyState === 1) {
+          dbConnected = true
+          resolve()
+        } else if (Date.now() - startTime > maxWait) {
+          resolve() // Timeout - proceed anyway, connection will retry
+        } else {
+          setTimeout(checkConnection, 100)
+        }
+      }
+      checkConnection()
+    })
+    return next()
+  }
+
+  // Start connection
+  isConnecting = true
+  try {
+    await connectDB()
+    connectCloudinary() // Synchronous config
+    dbConnected = true
+    isConnecting = false
+    next()
+  } catch (error) {
+    isConnecting = false
+    console.error("Database connection failed:", error)
+    // Don't block - let the route handler deal with it
+    // Some routes might work without DB (health check, etc.)
+    next()
+  }
+}
 
 //  middlewares
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
     if (!origin) return callback(null, true);
 
     console.log("Incoming Request Origin:", origin);
-    if (allowedOrigins.includes(origin)) {
+    
+    // Check if origin is in allowed list
+    const isAllowed = allowedOrigins.some(allowed => {
+      return origin === allowed || origin.startsWith(allowed);
+    });
+    
+    if (isAllowed) {
       callback(null, true);
     } else {
-      console.log("Blocked by CORS:", origin);
+      console.log("Blocked by CORS:", origin, "Allowed origins:", allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'token']
 }));
+
 app.use(express.json())
 
-// Api test
+// Health check endpoint (no DB required)
 app.get("/", (req, res) => {
-  res.send("Backend is runing. Allowed Origins: " + JSON.stringify(allowedOrigins));
+  res.json({ 
+    success: true,
+    message: "Backend is running",
+    allowedOrigins: allowedOrigins,
+    dbStatus: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+  });
 })
+
+// Health check for Vercel
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    success: true,
+    status: "healthy",
+    timestamp: new Date().toISOString()
+  });
+})
+
+// Ensure DB connection for API routes (serverless-safe)
+if (isServerless) {
+  app.use("/api/*", ensureDBConnection)
+}
 
 // api endpoints
 app.use("/api/appointment", appointmentRouter)
@@ -79,19 +162,27 @@ app.use("/api/user", userRouter)
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Global Error Handler:", err.stack);
-  res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
+  res.status(err.status || 500).json({ 
+    success: false, 
+    message: "Internal Server Error", 
+    error: process.env.NODE_ENV === 'production' ? "Something went wrong" : err.message 
+  });
 });
 
-// Startup function
+// Startup function (only for local development)
 const startServer = async () => {
+  if (isServerless) {
+    console.log("Running in serverless mode - database connections will be handled per-request")
+    connectCloudinary() // Initialize Cloudinary (synchronous)
+    return
+  }
+
   try {
     await connectDB();
-    await connectCloudinary();
+    connectCloudinary();
     console.log("Database and Cloudinary connected successfully.");
 
-    // Only listen if not running in Vercel environment (Vercel handles the port binding)
-    // OR if we want to run locally
-    if (process.env.NODE_ENV !== 'production') {
+    if (httpServer) {
       httpServer.listen(port, () => {
         console.log("Server running on port: " + port)
         console.log("Socket.IO server initialized")
@@ -99,11 +190,14 @@ const startServer = async () => {
     }
   } catch (error) {
     console.error("Failed to start server:", error);
-    process.exit(1);
+    // Don't exit in production - let Vercel handle it
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 }
 
 startServer();
 
-// Export the app for Vercel
-export default httpServer;
+// Export the Express app for Vercel (REQUIRED - Vercel expects the Express app, not HTTP server)
+export default app;
