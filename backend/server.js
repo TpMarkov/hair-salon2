@@ -14,6 +14,7 @@ import userRouter from "./routes/user.route.js";
 //  app config
 const app = express()
 const port = process.env.PORT || 4000
+app.options("*", cors());
 
 // Create HTTP server
 const httpServer = createServer(app)
@@ -41,8 +42,13 @@ connectCloudinary()
 console.log("Cloudinary connected successfully.")
 
 //  middlewares
+app.use(cors({
+  origin: "https://hair-salon2-ebon.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 app.use(express.json())
-app.use(cors())
 
 // Api test
 app.get("/", (req, res) => {
