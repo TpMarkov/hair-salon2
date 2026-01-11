@@ -22,7 +22,8 @@ const allowedOrigins = [
   "http://localhost:5174",
   process.env.FRONTEND_URL,
   process.env.ADMIN_URL,
-  "https://hair-salon2-frontend.vercel.app", // Hardcoded for now, ideally use env var
+  "https://hair-salon2-frontend.vercel.app", // Frontend deployment URL
+  "https://hair-salon2-admin-dashboard.vercel.app", // Admin deployment URL
 ].filter(Boolean); // Remove undefined/null values
 
 console.log("Allowed Origins:", allowedOrigins);

@@ -16,7 +16,7 @@ Set these in your Vercel project settings (Project → Settings → Environment 
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net
 JWT_SECRET=your-secret-key-for-jwt-tokens (REQUIRED)
 FRONTEND_URL=https://hair-salon2-frontend.vercel.app
-ADMIN_URL=https://your-admin-url.vercel.app (if you have one)
+ADMIN_URL=https://hair-salon2-admin-dashboard.vercel.app (your admin deployment URL)
 CLOUDINARY_NAME=your-cloudinary-name (optional - only needed for image uploads)
 CLOUDINARY_API_KEY=your-api-key (optional)
 CLOUDINARY_SECRET_KEY=your-secret-key (optional)
@@ -24,6 +24,8 @@ ADMIN_EMAIL=your-admin-email (optional - for admin authentication)
 ADMIN_PASSWORD=your-admin-password (optional - for admin authentication)
 NODE_ENV=production
 ```
+
+**Note**: The admin URL is automatically added to CORS allowed origins. If your admin URL is different, update `ADMIN_URL` environment variable.
 
 **Critical Variables (Required):**
 - `MONGODB_URI` - MongoDB connection string
