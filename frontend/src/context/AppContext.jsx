@@ -10,6 +10,7 @@ const AppContextProvider = (props) => {
   const [appointments, setAppointments] = useState([])
   const [services, setServices] = useState([])
   const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
+  const [userData, setUserData] = useState(false)
 
 
   const getAppointments = async () => {
@@ -40,17 +41,42 @@ const AppContextProvider = (props) => {
     }
   }
 
+  const loadUserProfileData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
+      if (data.success) {
+        setUserData(data.userData)
+      } else {
+        toast.error(data.message)
+      }
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
   useEffect(() => {
     getServicesData()
     getAppointments()
   }, [])
+
+  useEffect(() => {
+    if (token) {
+      loadUserProfileData()
+    } else {
+      setUserData(false)
+    }
+  }, [token])
 
   const value = {
     services,
     backendUrl,
     appointments,
     getAppointments,
-    token, setToken
+    token, setToken,
+    userData, setUserData,
+    loadUserProfileData
   }
 
   return (
