@@ -11,7 +11,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
-  const { token, setToken, setUserData } = useContext(AppContext)
+  const { token, setToken, userData, setUserData } = useContext(AppContext)
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const Navbar = () => {
           Salon</p>
       </div>
       <ul className={`hidden md:flex items-start gap-5 font-medium`}>
-        {navLinks.map((navlink, index) => (
+        {navLinks.filter(link => token ? true : link.title !== "Моите часове").map((navlink, index) => (
 
           <li key={index} className="uppercase tracking-tight">
             <NavLink
@@ -76,8 +76,8 @@ const Navbar = () => {
         ))}
       </ul>
       <div className="flex items-center gap-4">
-        {token ? <div className={"flex items-center gap-1 cursor-pointer group relative"}>
-          <img src={`/images/golden_avatar.png`} alt={"user-image"}
+        {token && userData ? <div className={"flex items-center gap-1 cursor-pointer group relative"}>
+          <img src={userData.image ? userData.image : "/images/golden_avatar.png"} alt={"user-image"}
             className={"w-10 rounded-full "}
           />
           <ChevronDown className="hidden md:block" />
@@ -131,7 +131,7 @@ const Navbar = () => {
 
         {/* Menu Links */}
         <nav className="flex-1 flex flex-col items-center justify-center py-12 gap-8 px-6">
-          {navLinks.map((link, index) => (
+          {navLinks.filter(link => token ? true : link.title !== "Моите часове").map((link, index) => (
             <NavLink
               key={index}
               to={link.href}

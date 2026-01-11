@@ -2,6 +2,7 @@ import validator from "validator"
 import bcrypt from "bcrypt"
 import { userModel } from "../models/user.model.js";
 import jwt from "jsonwebtoken"
+import { v2 as cloudinary } from 'cloudinary'
 
 //  Register user
 const registerUser = async (req, res) => {
@@ -83,9 +84,30 @@ const loginUser = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const { userId } = req.body
+    const userId = req.userId
     const userData = await userModel.findById(userId).select('-password')
     res.json({ success: true, userData })
+
+  } catch (error) {
+    console.log(error)
+    res.json({ success: false, message: error.message })
+  }
+}
+
+const updateProfile = async (req, res) => {
+  try {
+    const { name, phone } = req.body
+    const userId = req.userId
+
+    const updateData = { name, phone }
+
+    if (req.file) {
+      const imageUpload = await cloudinary.uploader.upload(req.file.path, { resource_type: 'image' })
+      updateData.image = imageUpload.secure_url
+    }
+
+    await userModel.findByIdAndUpdate(userId, updateData)
+    res.json({ success: true, message: "Профилът е обновен успешно" })
 
   } catch (error) {
     console.log(error)
@@ -96,5 +118,6 @@ const getProfile = async (req, res) => {
 export {
   registerUser,
   loginUser,
-  getProfile
+  getProfile,
+  updateProfile
 }
