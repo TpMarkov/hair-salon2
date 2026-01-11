@@ -1,8 +1,6 @@
 import express from "express"
 import cors from "cors"
 import 'dotenv/config'
-import { createServer } from 'http'
-import { Server } from 'socket.io'
 import mongoose from "mongoose"
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
@@ -29,26 +27,40 @@ const allowedOrigins = [
 
 console.log("Allowed Origins:", allowedOrigins);
 
-// Create HTTP server only for local development (Socket.IO needs it)
-let httpServer = null
+// Socket.IO - initialize lazily only in local development (serverless doesn't support WebSockets)
 let io = null
+let httpServer = null
 
-if (!isServerless) {
-  httpServer = createServer(app)
-  io = new Server(httpServer, {
-    cors: {
-      origin: allowedOrigins,
-      methods: ["GET", "POST"],
-      credentials: true
-    }
-  })
-
-  io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id)
-    socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id)
+// Lazy Socket.IO initialization function
+const initSocketIO = async () => {
+  if (isServerless || io !== null) return io
+  
+  try {
+    const { createServer } = await import('http')
+    const { Server } = await import('socket.io')
+    
+    httpServer = createServer(app)
+    io = new Server(httpServer, {
+      cors: {
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        credentials: true
+      }
     })
-  })
+
+    io.on('connection', (socket) => {
+      console.log('Client connected:', socket.id)
+      socket.on('disconnect', () => {
+        console.log('Client disconnected:', socket.id)
+      })
+    })
+    
+    console.log("Socket.IO initialized")
+    return io
+  } catch (error) {
+    console.warn("Socket.IO initialization skipped:", error.message)
+    return null
+  }
 }
 
 export { io }
@@ -201,10 +213,12 @@ const startServer = async () => {
     connectCloudinary();
     console.log("Database and Cloudinary connected successfully.");
 
+    // Initialize Socket.IO for local development
+    await initSocketIO()
+    
     if (httpServer) {
       httpServer.listen(port, () => {
         console.log("Server running on port: " + port)
-        console.log("Socket.IO server initialized")
       })
     }
   } catch (error) {
