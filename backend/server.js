@@ -1,8 +1,8 @@
 import express from "express"
 import cors from "cors"
 import 'dotenv/config'
-import {createServer} from 'http'
-import {Server} from 'socket.io'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
@@ -14,7 +14,14 @@ import userRouter from "./routes/user.route.js";
 //  app config
 const app = express()
 const port = process.env.PORT || 4000
-app.options("*", cors());
+
+// Allowed origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  process.env.FRONTEND_URL,
+  process.env.ADMIN_URL
+].filter(Boolean); // Remove undefined/null values
 
 // Create HTTP server
 const httpServer = createServer(app)
@@ -22,7 +29,7 @@ const httpServer = createServer(app)
 // Initialize Socket.IO with CORS
 export const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:5174"], // frontend and admin URLs
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -43,9 +50,7 @@ console.log("Cloudinary connected successfully.")
 
 //  middlewares
 app.use(cors({
-  origin: "https://hair-salon2-ebon.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json())
