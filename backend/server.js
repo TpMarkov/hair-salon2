@@ -169,15 +169,34 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Validate critical environment variables
+const validateEnv = () => {
+  const required = ['MONGODB_URI', 'JWT_SECRET']
+  const missing = required.filter(key => !process.env[key])
+  
+  if (missing.length > 0) {
+    console.error("Missing required environment variables:", missing.join(', '))
+    console.error("Server may not function correctly without these variables")
+    // Don't throw in serverless - let it fail gracefully on first request
+    if (!isServerless) {
+      throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
+    }
+  }
+}
+
 // Startup function (only for local development)
 const startServer = async () => {
-  if (isServerless) {
-    console.log("Running in serverless mode - database connections will be handled per-request")
-    connectCloudinary() // Initialize Cloudinary (synchronous)
-    return
-  }
-
   try {
+    // Validate environment variables
+    validateEnv()
+    
+    if (isServerless) {
+      console.log("Running in serverless mode - database connections will be handled per-request")
+      connectCloudinary() // Initialize Cloudinary (synchronous, fails gracefully)
+      return
+    }
+
+    // Local development: connect immediately
     await connectDB();
     connectCloudinary();
     console.log("Database and Cloudinary connected successfully.");
@@ -190,14 +209,28 @@ const startServer = async () => {
     }
   } catch (error) {
     console.error("Failed to start server:", error);
-    // Don't exit in production - let Vercel handle it
-    if (process.env.NODE_ENV !== 'production') {
+    // In serverless, don't exit - let Vercel handle it
+    // In local dev, exit to surface the error
+    if (!isServerless && process.env.NODE_ENV !== 'production') {
       process.exit(1);
     }
   }
 }
 
-startServer();
+// Only call startServer if not in serverless, or wrap it properly
+if (!isServerless) {
+  startServer();
+} else {
+  // In serverless, just initialize Cloudinary (synchronous, safe)
+  try {
+    validateEnv()
+    connectCloudinary()
+    console.log("Serverless function initialized")
+  } catch (error) {
+    console.error("Serverless initialization error:", error)
+    // Don't throw - let the function export anyway
+  }
+}
 
 // Export the Express app for Vercel (REQUIRED - Vercel expects the Express app, not HTTP server)
 export default app;

@@ -14,13 +14,24 @@ Set these in your Vercel project settings (Project → Settings → Environment 
 ### Backend Environment Variables:
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net
+JWT_SECRET=your-secret-key-for-jwt-tokens (REQUIRED)
 FRONTEND_URL=https://hair-salon2-frontend.vercel.app
 ADMIN_URL=https://your-admin-url.vercel.app (if you have one)
-CLOUDINARY_NAME=your-cloudinary-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_SECRET_KEY=your-secret-key
+CLOUDINARY_NAME=your-cloudinary-name (optional - only needed for image uploads)
+CLOUDINARY_API_KEY=your-api-key (optional)
+CLOUDINARY_SECRET_KEY=your-secret-key (optional)
+ADMIN_EMAIL=your-admin-email (optional - for admin authentication)
+ADMIN_PASSWORD=your-admin-password (optional - for admin authentication)
 NODE_ENV=production
 ```
+
+**Critical Variables (Required):**
+- `MONGODB_URI` - MongoDB connection string
+- `JWT_SECRET` - Secret key for signing JWT tokens (use a strong random string)
+
+**Optional Variables:**
+- Cloudinary variables - Only needed if you use image upload features
+- Admin credentials - Only needed for admin authentication
 
 ### Frontend Environment Variables:
 ```

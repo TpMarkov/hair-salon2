@@ -28,21 +28,28 @@ const connectDB = async () => {
   // Start new connection
   isConnecting = true
   try {
-    // Set up connection event handlers
-    mongoose.connection.on("connected", () => {
-      console.log("MongoDB connected successfully")
-      isConnecting = false
-    })
+    // Validate MongoDB URI is present
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI environment variable is not set")
+    }
 
-    mongoose.connection.on("error", (err) => {
-      console.error("MongoDB connection error:", err)
-      isConnecting = false
-    })
+    // Set up connection event handlers (only once)
+    if (!mongoose.connection.listeners('connected').length) {
+      mongoose.connection.on("connected", () => {
+        console.log("MongoDB connected successfully")
+        isConnecting = false
+      })
 
-    mongoose.connection.on("disconnected", () => {
-      console.log("MongoDB disconnected")
-      isConnecting = false
-    })
+      mongoose.connection.on("error", (err) => {
+        console.error("MongoDB connection error:", err)
+        isConnecting = false
+      })
+
+      mongoose.connection.on("disconnected", () => {
+        console.log("MongoDB disconnected")
+        isConnecting = false
+      })
+    }
 
     // Connection options optimized for serverless
     const options = {
@@ -59,6 +66,7 @@ const connectDB = async () => {
   } catch (error) {
     isConnecting = false
     console.error("MongoDB connection error:", error)
+    // Re-throw so callers can handle it
     throw error
   }
 }
