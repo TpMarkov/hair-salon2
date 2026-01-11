@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import { navLinks } from "../assets/assets.js";
 import { NavLink } from "react-router-dom";
 import useIsMobile from "../hooks/use-is-mobile.ts";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, Menu, X } from 'lucide-react';
-import { AppContext } from '../context/AppContext.jsx';
+import { ChevronDown, Menu, X } from "lucide-react";
+import { AppContext } from "../context/AppContext.jsx";
 
 const Navbar = () => {
-  const { isMobile } = useIsMobile()
+  const { isMobile } = useIsMobile();
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
-  const { token, setToken, userData, setUserData } = useContext(AppContext)
+  const { token, setToken, userData, setUserData } = useContext(AppContext);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -22,88 +22,125 @@ const Navbar = () => {
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
     if (showMenu) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
   }, [showMenu]);
 
   const logout = () => {
-    setToken(false)
-    setUserData(false)
-    localStorage.removeItem('token')
-    navigate('/')
-  }
-
+    setToken(false);
+    setUserData(false);
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
     <div
-      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-md shadow-sm border-b-white/20' : 'bg-transparent'}`}>
-      <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
+      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
+          : "bg-transparent"
+      }`}
+    >
+      <div
+        className="flex items-center cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <a href="/">
-          <img src="/images/logo.png" alt="logo" className="w-15 h-15 cursor-pointer" />
+          <img
+            src="/images/logo.png"
+            alt="logo"
+            className="w-15 h-15 cursor-pointer"
+          />
         </a>
-        <p className={"logo-font text-xl text-gold"}>Hair
-          Salon</p>
+        <p className={"logo-font text-xl text-gold"}>Hair Salon</p>
       </div>
       <ul className={`hidden md:flex items-start gap-5 font-medium`}>
-        {navLinks.filter(link => token ? true : link.title !== "Моите часове").map((navlink, index) => (
-
-          <li key={index} className="uppercase tracking-tight">
-            <NavLink
-              to={navlink.href}
-              className={({ isActive }) =>
-                `flex flex-col items-center hover:text-yellow-500`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <p>{navlink.title}</p>
-                  {isActive && (
-                    <hr className="mt-1 h-0.5 w-3/5 bg-yellow-500" />
-                  )}
-                </>
-              )}
-            </NavLink>
-          </li>
-        ))}
+        {navLinks
+          .filter((link) => (token ? true : link.title !== "Моите часове"))
+          .map((navlink, index) => (
+            <li key={index} className="uppercase tracking-tight">
+              <NavLink
+                to={navlink.href}
+                className={({ isActive }) =>
+                  `flex flex-col items-center hover:text-yellow-500`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <p>{navlink.title}</p>
+                    {isActive && (
+                      <hr className="mt-1 h-0.5 w-3/5 bg-yellow-500" />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            </li>
+          ))}
       </ul>
       <div className="flex items-center gap-4">
-        {token && userData ? <div className={"flex items-center gap-1 cursor-pointer group relative"}>
-          <img
-            src={userData?.image || "/images/golden_avatar.png"}
-            alt="user-image"
-            className="w-10 rounded-full"
-            onError={(e) => {
-              e.currentTarget.src = "/images/golden_avatar.png";
-            }}
-          />
-          <ChevronDown className="hidden md:block" />
+        {token && userData ? (
           <div
-            className={"absolute top-0 right-0 pt-20 text-base font-medium text-gray-600 z-20 hidden group-hover:block"}>
-            <div className={"min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4"}>
-              <p onClick={() => navigate("/my-profile")} className={"hover:text-black cursor-pointer"}
-              >Моят профил</p>
-              <p onClick={() => navigate("/my-appointments")} className={"hover:text-black cursor-pointer"}
-              >Моите часове</p>
-              <p onClick={logout} className={"hover:text-black cursor-pointer"}
-              >Излизане</p>
+            className={"flex items-center gap-1 cursor-pointer group relative"}
+          >
+            <img
+              src={userData?.image || "/images/golden_avatar.png"}
+              alt="user-image"
+              className="w-10 rounded-full"
+              onError={(e) => {
+                e.currentTarget.src = "/images/golden_avatar.png";
+              }}
+            />
+            <ChevronDown className="hidden md:block" />
+            <div
+              className={
+                "absolute top-0 right-0 pt-20 text-base font-medium text-gray-600 z-20 hidden group-hover:block"
+              }
+            >
+              <div
+                className={
+                  "min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4"
+                }
+              >
+                <p
+                  onClick={() => navigate("/my-profile")}
+                  className={"hover:text-black cursor-pointer"}
+                >
+                  Моят профил
+                </p>
+                <p
+                  onClick={() => navigate("/my-appointments")}
+                  className={"hover:text-black cursor-pointer"}
+                >
+                  Моите часове
+                </p>
+                <p
+                  onClick={logout}
+                  className={"hover:text-black cursor-pointer"}
+                >
+                  Излизане
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-          :
-          <button onClick={() => navigate("/login")}
-            className={"bg-primary-gradient text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"}>Регистрирай
-            се
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className={
+              "bg-primary-gradient text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"
+            }
+          >
+            Вход / Регистрация{" "}
           </button>
-        }
+        )}
 
         {/* Burger Menu Icon (Mobile Only) */}
         <button
@@ -114,17 +151,19 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */
-      }
+      {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${showMenu ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          } flex flex-col h-screen overflow-y-auto`}
+        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${
+          showMenu ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        } flex flex-col h-screen overflow-y-auto`}
       >
         {/* Menu Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white sticky top-0 z-10">
           <div className="flex items-center">
             <img src="/images/logo.png" alt="logo" className="w-12 h-12" />
-            <p className="logo-font text-xl text-gold ml-3 font-bold">Hair Salon</p>
+            <p className="logo-font text-xl text-gold ml-3 font-bold">
+              Hair Salon
+            </p>
           </div>
           <button
             onClick={() => setShowMenu(false)}
@@ -136,21 +175,24 @@ const Navbar = () => {
 
         {/* Menu Links */}
         <nav className="flex-1 flex flex-col items-center justify-center py-12 gap-8 px-6">
-          {navLinks.filter(link => token ? true : link.title !== "Моите часове").map((link, index) => (
-            <NavLink
-              key={index}
-              to={link.href}
-              onClick={() => setShowMenu(false)}
-              className={({ isActive }) =>
-                `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${isActive
-                  ? 'text-gold bg-amber-500/5 shadow-sm border border-gold/10'
-                  : 'text-gray-500 hover:text-gold hover:bg-gray-50'
-                }`
-              }
-            >
-              {link.title}
-            </NavLink>
-          ))}
+          {navLinks
+            .filter((link) => (token ? true : link.title !== "Моите часове"))
+            .map((link, index) => (
+              <NavLink
+                key={index}
+                to={link.href}
+                onClick={() => setShowMenu(false)}
+                className={({ isActive }) =>
+                  `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${
+                    isActive
+                      ? "text-gold bg-amber-500/5 shadow-sm border border-gold/10"
+                      : "text-gray-500 hover:text-gold hover:bg-gray-50"
+                  }`
+                }
+              >
+                {link.title}
+              </NavLink>
+            ))}
 
           {!token && (
             <button
@@ -176,7 +218,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
