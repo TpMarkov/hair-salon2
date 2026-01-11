@@ -40,6 +40,12 @@ const AdminContextProvider = (props) => {
       getAllAppointments() // Refresh appointments list
     })
 
+    socketInstance.on('appointmentCancelled', (data) => {
+      console.log('Appointment cancelled:', data)
+      toast.info('Appointment cancelled by user!')
+      getAllAppointments() // Refresh appointments list
+    })
+
     setSocket(socketInstance)
 
     // Cleanup on unmount

@@ -60,4 +60,32 @@ const userAppointments = async (req, res) => {
   }
 }
 
-export { createAppointment, getAllAppointments, userAppointments }
+// API to cancel appointment
+const cancelAppointment = async (req, res) => {
+  try {
+    const { appointmentId } = req.body
+    const userId = req.userId
+
+    const appointment = await appointmentModel.findById(appointmentId)
+
+    if (appointment.userId !== userId) {
+      return res.json({ success: false, message: "Unauthorized action" })
+    }
+
+    await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+
+    // Emit Socket.IO event to notify admin dashboard
+    io.emit('appointmentCancelled', {
+      appointmentId,
+      timestamp: Date.now()
+    })
+
+    res.json({ success: true, message: "Appointment Cancelled" })
+
+  } catch (error) {
+    console.log(error)
+    res.json({ success: false, message: error.message })
+  }
+}
+
+export { createAppointment, getAllAppointments, userAppointments, cancelAppointment }
