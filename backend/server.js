@@ -1,13 +1,14 @@
 import express from "express"
 import cors from "cors"
 import 'dotenv/config'
-import { createServer } from 'http'
-import { Server } from 'socket.io'
+import {createServer} from 'http'
+import {Server} from 'socket.io'
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
 import adminRouter from "./routes/admin.route.js";
 import serviceRouter from "./routes/service.route.js";
+import userRouter from "./routes/user.route.js";
 
 
 //  app config
@@ -52,7 +53,7 @@ app.get("/", (req, res) => {
 app.use("/api/appointment", appointmentRouter)
 app.use("/api/admin", adminRouter)
 app.use("/api/service", serviceRouter)
-
+app.use("/api/user", userRouter)
 
 
 httpServer.listen(port, () => {
