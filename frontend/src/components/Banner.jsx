@@ -7,6 +7,26 @@ const Banner = () => {
   const navigate = useNavigate()
   const {userData} = useContext(AppContext)
 
+
+  const APP_URL = "https://hair-salon-frontend-ten.vercel.app/app-release.apk"
+
+  const downlaodFileAtUrl = async (url) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    const blobUrl = window.URL.createObjectURL(blob);
+    const aTag = document.createElement("a");
+
+    aTag.href = blobUrl;
+    aTag.download = "app-release.apk";
+    document.body.appendChild(aTag);
+
+    aTag.click();
+
+    aTag.remove();
+    window.URL.revokeObjectURL(blobUrl);
+  };
+
   return (
       <div
           className="relative overflow-hidden rounded-3xl bg-black/40 border border-white/5 shadow-2xl my-20 mx-4 md:mx-10 group">
@@ -26,13 +46,17 @@ const Banner = () => {
                 Присъедини се към нашите доволни клиенти и се възползвай от професионална грижа за твоята коса.
               </p>
 
-              {!userData && (<button
-                  onClick={() => navigate('/login')}
+              {/*{!userData && (*/}
+              <button
+                  // onClick={() => navigate('/login')}
+                  onClick={() => downlaodFileAtUrl(APP_URL)}
                   className="group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95 cursor-pointer"
               >
                 <UserPlus size={24}/>
-                Създай профил
-              </button>)}
+                Изтеглете приложението
+              </button>
+              )
+              {/*}*/}
 
             </div>
           </div>
