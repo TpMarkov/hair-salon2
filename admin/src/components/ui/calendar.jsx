@@ -21,12 +21,10 @@ function Calendar({
         caption_label: "text-sm font-medium whitespace-nowrap",
         nav: "flex items-center justify-between absolute inset-x-0 top-0", // Use absolute inset-x-0 to pin buttons to caption edges
         button_previous: cn(
-          buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 z-10"
+          "inline-flex items-center justify-center rounded-md border border-input bg-transparent hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0 opacity-50 hover:opacity-100 z-10"
         ),
         button_next: cn(
-          buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 z-10"
+          "inline-flex items-center justify-center rounded-md border border-input bg-transparent hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0 opacity-50 hover:opacity-100 z-10"
         ),
         month_grid: "w-full border-collapse space-y-1",
         weekdays: "grid grid-cols-7",
