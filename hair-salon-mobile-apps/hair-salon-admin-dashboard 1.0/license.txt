@@ -1,5 +1,5 @@
 
-admin-dashboard 1.0
+hair-salon-admin-dashboard 1.0
 
 Copyright 2026 (c) WebIntoApp.com
 

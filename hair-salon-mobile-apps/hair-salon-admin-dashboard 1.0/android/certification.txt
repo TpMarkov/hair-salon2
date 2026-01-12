@@ -1,23 +1,23 @@
 ---------------------------------------------------
 Here are the ownership and the certification details
-of the admin-dashboard 1.0
+of the hair-salon-admin-dashboard 1.0
 ---------------------------------------------------
 
-app_name - 						admin-dashboard
-app_alias - 					admindashboard
+app_name - 						hair-salon-admin-dashboard
+app_alias - 					hairsalonadmindashboard
 app_author_name - 				My Company
 app_author_organizational - 	My Company
 app_author_organization - 		My Company
 app_author_locality - 			My Company
 app_author_state - 				Lovech
 app_author_country - 			Bulgaria
-app_password - 					rnskzzGRPhkB
+app_password - 					cGqqvHfmxTG4
 app_versionName - 				versionName "1.0"
 app_versionCode - 				100
 
 ---------------------------------------------------
 The certification was created by WebIntoApp.com at
-the Monday 12th of January 2026 01:31:07 PM
+the Monday 12th of January 2026 03:43:59 PM
 
 https://webintoapp.com
 ---------------------------------------------------

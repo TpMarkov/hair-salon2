@@ -2,7 +2,7 @@ import { DownloadIcon } from "lucide-react";
 import { AppContext } from "../context/AppContext.jsx";
 
 const Banner = () => {
-  const APP_URL = "https://hair-salon-frontend-ten.vercel.app/app-release.apk";
+  const APP_URL = "https://hair-salon-frontend-rho.vercel.app/app-release.apk";
 
   const downlaodFileAtUrl = async (url) => {
     const response = await fetch(url);

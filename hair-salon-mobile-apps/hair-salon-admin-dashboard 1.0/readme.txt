@@ -1,17 +1,17 @@
 
 FREE APP
 
-Created by WebIntoApp.com on Monday 12th of January 2026 01:31:08 PM.
+Created by WebIntoApp.com on Monday 12th of January 2026 03:44:00 PM.
 
 Release APK & App Bundle (AAB) ready to be submitted to Google Play Store 
 and to any other APK / AAB store over the internet.
 
 -------------------------------------
-App ID:			1077453
-App Key:		HrGZLKcqpLVDHNLNLjmfyucubkYNvfZk
-App Name:		admin-dashboard
+App ID:			1077671
+App Key:		UkSNEFabnOqBtNQRNegVZjwtPuFxaHzO
+App Name:		hair-salon-admin-dashboard
 App Version:	1.0
-Package:		com.webdevstudiohq.admindashboard
+Package:		com.webdevstudio.hairsalonadmindashboard
 Mode:			Free App
 -------------------------------------
 
@@ -23,7 +23,7 @@ Please note, your app is under a FREE mode, you can always
 convert it to your own dedicated and branded mobile app for 
 Android and iOS with all the premium features at:
 
-https://webintoapp.com/author/apps/1077453/edit?cmd=app-switcher
+https://webintoapp.com/author/apps/1077671/edit?cmd=app-switcher
 
 -------------------------------------
 Here are some useful links:
@@ -33,7 +33,7 @@ You can edit your app at:
 https://webintoapp.com/author/apps
 
 Get installs statistics at:
-https://webintoapp.com/author/stats?appid=1077453
+https://webintoapp.com/author/stats?appid=1077671
 
 The Author Area:
 https://webintoapp.com/author/dashboard
