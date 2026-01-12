@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route } from "react-router-dom";
 import About from "./pages/About.jsx";
 import Home from "./pages/Home.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -10,14 +10,14 @@ import Appointment from "./pages/Appointment.jsx";
 import Navbar from "./components/Navbar.jsx";
 import ServicesList from "./components/ServicesList.jsx";
 import Footer from "./components/Footer.jsx";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-
   return (
-    <div className={"mx-4 sm:mx-[10%]"}>
+    <div
+      className={"w-full overflow-x-hidden touch-pan-y overscroll-x-none px-5"}
+    >
       <ToastContainer position="top-right" theme="dark" />
       <Navbar />
 
@@ -34,7 +34,7 @@ function App() {
       </Routes>
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 /*Example of custom class*/
 @layer components {
   .btn-primary {
