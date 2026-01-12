@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { AdminContext } from "../context/AdminContext.jsx";
-import { assets } from "../assets/assets.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -23,7 +22,6 @@ const ServicesList = () => {
       }
 
       const formData = new FormData();
-
       formData.append("image", serviceImg);
       formData.append("type", type);
       formData.append("fee", fee);
@@ -54,14 +52,23 @@ const ServicesList = () => {
   };
 
   return (
-    <form onSubmit={onSubmitHandler} className="m-5 w-full">
-      <p className="mb-3 text-lg font-medium">Add service</p>
+    <form
+      onSubmit={onSubmitHandler}
+      className="w-full px-4 py-4 sm:px-6 sm:py-6"
+    >
+      <p className="mb-4 text-xl sm:text-lg font-semibold text-gray-800">
+        Add service
+      </p>
 
-      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll scrollbar-hiden">
-        <div className="flex items-center gap-4 mb-8 text-gray-500">
-          <label htmlFor="service-image">
+      <div className="bg-white border rounded-xl w-full max-w-4xl p-4 sm:p-8">
+        {/* Image upload */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 text-gray-500">
+          <label
+            htmlFor="service-image"
+            className="flex flex-col items-center gap-2 cursor-pointer"
+          >
             <img
-              className="w-16 bg-transparent rounded-full cursor-pointer"
+              className="w-20 h-20 object-cover rounded-full border"
               src={
                 serviceImg
                   ? URL.createObjectURL(serviceImg)
@@ -69,23 +76,27 @@ const ServicesList = () => {
               }
               alt="upload-area"
             />
+            <span className="text-sm sm:hidden">Tap to upload image</span>
           </label>
+
           <input
             onChange={(e) => setServiceImg(e.target.files[0])}
             type="file"
             id="service-image"
             hidden
           />
-          <p>Upload service image</p>
+
+          <p className="hidden sm:block">Upload service image</p>
         </div>
 
-        <div className="flex flex-col gap-4 text-gray-600">
+        {/* Form fields */}
+        <div className="flex flex-col gap-5 text-gray-700">
           <div className="flex flex-col gap-1">
-            <p>Service Name</p>
+            <label className="text-sm font-medium">Service Name</label>
             <input
               onChange={(e) => setType(e.target.value)}
               value={type}
-              className="border rounded px-3 py-2"
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary/30"
               type="text"
               placeholder="Service Name"
               required
@@ -93,11 +104,11 @@ const ServicesList = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p>Service Price</p>
+            <label className="text-sm font-medium">Service Price</label>
             <input
               onChange={(e) => setFee(e.target.value)}
               value={fee}
-              className="border rounded px-3 py-2"
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary/30"
               type="number"
               placeholder="20"
               required
@@ -105,11 +116,11 @@ const ServicesList = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p>Short Description</p>
+            <label className="text-sm font-medium">Short Description</label>
             <input
               onChange={(e) => setShortDescription(e.target.value)}
               value={shortDescription}
-              className="border rounded px-3 py-2"
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary/30"
               type="text"
               placeholder="Short summary"
               required
@@ -117,11 +128,11 @@ const ServicesList = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p>Description</p>
+            <label className="text-sm font-medium">Description</label>
             <textarea
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-              className="border rounded px-3 py-2"
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary/30"
               placeholder="Full service description"
               rows={4}
               required
@@ -129,11 +140,11 @@ const ServicesList = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p>Filter Category</p>
+            <label className="text-sm font-medium">Filter Category</label>
             <select
               onChange={(e) => setFilter(e.target.value)}
               value={filter}
-              className="border rounded px-3 py-2"
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               <option value="дамско">Дамско</option>
               <option value="мъжко">Мъжко</option>
@@ -141,9 +152,18 @@ const ServicesList = () => {
             </select>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
-            className="bg-primary px-10 py-3 mt-4 text-white rounded-full"
+            className="
+              bg-primary text-white font-semibold
+              w-full sm:w-auto
+              py-4 sm:py-3
+              rounded-xl
+              mt-6
+              sm:px-10
+              sticky bottom-4
+            "
           >
             Add Service
           </button>
