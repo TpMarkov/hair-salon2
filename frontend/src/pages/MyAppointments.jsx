@@ -18,6 +18,10 @@ const MyAppointments = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const navigate = useNavigate();
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const totalPages = Math.ceil(appointments.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -148,11 +152,10 @@ const MyAppointments = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`p-2 rounded-xl transition-all duration-300 ${
-              currentPage === 1
+            className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 1
                 ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
                 : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
-            }`}
+              }`}
           >
             <ChevronLeft size={24} />
           </button>
@@ -162,11 +165,10 @@ const MyAppointments = () => {
               <button
                 key={i}
                 onClick={() => handlePageChange(i + 1)}
-                className={`w-10 h-10 rounded-xl font-bold transition-all duration-300 ${
-                  currentPage === i + 1
+                className={`w-10 h-10 rounded-xl font-bold transition-all duration-300 ${currentPage === i + 1
                     ? "bg-primary-gradient text-white shadow-lg shadow-amber-500/20"
                     : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5"
-                }`}
+                  }`}
               >
                 {i + 1}
               </button>
@@ -176,11 +178,10 @@ const MyAppointments = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`p-2 rounded-xl transition-all duration-300 ${
-              currentPage === totalPages
+            className={`p-2 rounded-xl transition-all duration-300 ${currentPage === totalPages
                 ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
                 : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
-            }`}
+              }`}
           >
             <ChevronRight size={24} />
           </button>
