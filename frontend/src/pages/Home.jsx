@@ -4,7 +4,7 @@ import Services from "./Service.jsx";
 import ServicesMenu from "../components/ServicesMenu.jsx";
 import ServicesList from "../components/ServicesList.jsx";
 import Banner from "../components/Banner.jsx";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 const Home = () => {
   useEffect(() => {
@@ -12,12 +12,16 @@ const Home = () => {
   }, [])
 
   return (
-      <div>
-        <Header/>
-        <ServicesMenu/>
-        <Banner/>
-        <ServicesList/>
-      </div>
+    <main>
+      <Header />
+      <p className="sr-only">
+        Фризьорски салон в Ловеч, България. Адрес: Ловеч 5500.
+        Професионални фризьорски услуги, подстригване, боядисване и терапии за коса.
+      </p>
+      <ServicesMenu />
+      <Banner />
+      <ServicesList />
+    </main>
   )
 }
 export default Home
