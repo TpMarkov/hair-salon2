@@ -77,4 +77,15 @@ const removeService = async (req, res) => {
     }
 }
 
-export { addService, listServices, removeService }
+// API for fetching newest 3 services for ServicesMenu
+const getLatestServices = async (req, res) => {
+    try {
+        const services = await serviceModel.find({}).sort({ createdAt: -1 }).limit(3)
+        res.json({ success: true, services })
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+export { addService, listServices, removeService, getLatestServices }

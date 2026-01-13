@@ -7,7 +7,7 @@ const serviceSchema = new mongoose.Schema({
     shortDescription: { type: String, required: true },
     description: { type: String, required: true },
     filter: { type: String, required: true },
-})
+}, { timestamps: true })
 
 const serviceModel = mongoose.models.service || mongoose.model('service', serviceSchema)
 

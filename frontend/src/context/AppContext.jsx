@@ -9,6 +9,7 @@ const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
   const [appointments, setAppointments] = useState([])
   const [services, setServices] = useState([])
+  const [latestServices, setLatestServices] = useState([])
   const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
   const [userData, setUserData] = useState(false)
 
@@ -46,6 +47,20 @@ const AppContextProvider = (props) => {
     }
   }
 
+  const getLatestServices = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + '/api/service/latest')
+      if (data.success) {
+        setLatestServices(data.services)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
   const loadUserProfileData = async () => {
     try {
       const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
@@ -63,6 +78,7 @@ const AppContextProvider = (props) => {
 
   useEffect(() => {
     getServicesData()
+    getLatestServices()
   }, [])
 
   useEffect(() => {
@@ -77,9 +93,11 @@ const AppContextProvider = (props) => {
 
   const value = {
     services,
+    latestServices,
     backendUrl,
     appointments,
     getAppointments,
+    getLatestServices,
     token, setToken,
     userData, setUserData,
     loadUserProfileData
