@@ -105,8 +105,6 @@ const Contact = () => {
           alert("Изпращането на съобщението не беше успешно.");
         }
       );
-
-    //TODO : Implement sending emails
   };
 
 
