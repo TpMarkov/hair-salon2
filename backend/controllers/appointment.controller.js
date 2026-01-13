@@ -11,6 +11,15 @@ const createAppointment = async (req, res) => {
       return res.json({ success: false, message: "Missing Details" })
     }
 
+    const existingAppointments = await appointmentModel.find({ slotDate, cancelled: false })
+
+    // Check for overlapping appointments (30-minute slots)
+    const isSlotTaken = existingAppointments.some(appointment => appointment.slotTime === slotTime)
+
+    if (isSlotTaken) {
+      return res.json({ success: false, message: "This slot is already booked" })
+    }
+
     const appointmentData = {
       userId,
       serviceData,

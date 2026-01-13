@@ -4,6 +4,7 @@ import { AppContext } from "../context/AppContext.jsx"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { useParams, useNavigate } from "react-router-dom"
+import { io } from "socket.io-client"
 
 
 const Service = () => {
@@ -54,17 +55,32 @@ const Service = () => {
 
   useEffect(() => {
     fetchBookedSlots()
-  }, [])
+
+    // Socket implementation for production
+    const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
+    if (isProduction && backendUrl) {
+      const socketInstance = io(backendUrl, {
+        transports: ['websocket', 'polling']
+      })
+
+      socketInstance.on('appointmentCreated', fetchBookedSlots)
+      socketInstance.on('appointmentCancelled', fetchBookedSlots)
+
+      return () => {
+        socketInstance.disconnect()
+      }
+    }
+  }, [backendUrl])
 
   const getAvailableSlots = async () => {
     setServiceSlots([])
 
     // Getting current date
     let today = new Date();
-    let allSlots = []
+    let allSlotsData = []
     let daysChecked = 0
 
-    while (allSlots.length < 7) {
+    while (allSlotsData.length < 7) {
       // Getting date with index
       let currentDate = new Date(today);
       currentDate.setDate(today.getDate() + daysChecked);
@@ -74,72 +90,70 @@ const Service = () => {
       // Skip weekends
       if (dayOfWeek !== 0 && dayOfWeek !== 6) {
         // Setting end time of the date
-        let endTime = new Date(currentDate)
-        endTime.setHours(19, 0, 0, 0)
+        let workingDayEnd = new Date(currentDate)
+        workingDayEnd.setHours(19, 0, 0, 0)
 
         // Setting start hours
-        if (today.getDate() === currentDate.getDate()) {
-          currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10)
-          currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0)
+        let slotTimePointer = new Date(currentDate)
+        if (today.toDateString() === currentDate.toDateString()) {
+          // If today, start from now (rounded to next 30 min), but not before 10 AM
+          const now = new Date()
+          let startHour = now.getHours()
+          let startMin = now.getMinutes()
+
+          if (startMin > 30) {
+            startHour += 1
+            startMin = 0
+          } else if (startMin > 0) {
+            startMin = 30
+          }
+
+          if (startHour < 10) {
+            startHour = 10
+            startMin = 0
+          }
+
+          slotTimePointer.setHours(startHour, startMin, 0, 0)
         } else {
-          currentDate.setHours(10)
-          currentDate.setMinutes(0)
+          slotTimePointer.setHours(10, 0, 0, 0)
         }
 
         let timeSlots = []
-        while (currentDate < endTime) {
-          let formattedTime = currentDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-          let day = currentDate.getDate()
-          let month = currentDate.getMonth() + 1
-          let year = currentDate.getFullYear()
+        while (slotTimePointer < workingDayEnd) {
+          let formattedTime = slotTimePointer.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
+          let day = slotTimePointer.getDate()
+          let month = slotTimePointer.getMonth() + 1
+          let year = slotTimePointer.getFullYear()
 
           const slotDate = day + "_" + month + "_" + year
 
           // Check if slot is available
           const isSlotAvailable = bookedSlots.every(booking => {
             if (booking.slotDate === slotDate) {
-              // Parse booking time
-              const [bookingHour, bookingMinute] = booking.slotTime.split(':').map(Number)
-              const bookingTime = bookingHour * 60 + bookingMinute
-
-              // Parse current slot time
-              const [currentHour, currentMinute] = formattedTime.split(':').map(Number)
-              const currentTime = currentHour * 60 + currentMinute
-
-              // 1. If this exact slot is booked
-              if (booking.slotTime === formattedTime) return false
-
-              // 2. If this slot is within the 1 hour (2 slots) AFTER a booking
-              // A booking at 10:00 blocks 10:00, 10:30, 11:00
-              // So if current time is > booking time AND current time <= booking time + 60 mins
-              const timeDiff = currentTime - bookingTime
-              if (timeDiff > 0 && timeDiff <= 60) return false
-
-              return true
+              return booking.slotTime !== formattedTime
             }
             return true
           })
 
           if (isSlotAvailable) {
-            // Add slot to array
             timeSlots.push({
-              dateTime: new Date(currentDate),
+              dateTime: new Date(slotTimePointer),
               time: formattedTime,
             })
           }
 
           // Update next slot by 30 mins
-          currentDate.setMinutes(currentDate.getMinutes() + 30)
+          slotTimePointer.setMinutes(slotTimePointer.getMinutes() + 30)
         }
 
-        // Add the day even if it has no slots, so we can show the "No available slots" message
-        // But the logic below expects to push an array of slots. 
-        // We'll push an empty array if needed, but we need to handle it in rendering
-        allSlots.push(timeSlots)
+        allSlotsData.push({
+          date: new Date(currentDate),
+          slots: timeSlots
+        })
       }
       daysChecked++
     }
-    setServiceSlots(allSlots)
+    setServiceSlots(allSlotsData)
   }
 
   useEffect(() => {
@@ -163,7 +177,7 @@ const Service = () => {
         return toast.warn("Моля, изберете час")
       }
 
-      const date = serviceSlots[slotIndex][0].dateTime
+      const date = serviceSlots[slotIndex].date
 
       let day = date.getDate()
       let month = date.getMonth() + 1
@@ -264,25 +278,6 @@ const Service = () => {
               className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-2 px-2 snap-x"
             >
               {serviceSlots && serviceSlots.map((item, index) => {
-                // getting date from the first slot if exists, or calculating it based on index relative to today is harder because we skip weekends. 
-                // Better approach: We need to store the date object itself in the allSlots array structure, OR rely on the fact that if item is empty, we still need to know the date.
-                // Wait, my previous `getAvailableSlots` logic pushes `timeSlots` array. 
-                // If `timeSlots` is empty, `item[0]` will be undefined.
-                // let's adjust `getAvailableSlots` to return an object structure { date: Date, slots: [] }
-                // OR quick fix: we can infer the date if we change how we store it.
-                // Actually, looking at the code I injected, I am just pushing `timeSlots`.
-                // So if `item` is empty, I don't know the date easily without recalculating logic.
-
-                // Let's rely on my previous edit where I pushed empty arrays.
-                // But wait, if I assume `item[0]` exists, it will crash.
-
-                // Let's modify the day rendering to be safer, but I need the date. 
-                // The best way is to re-render the stored structure in `getAvailableSlots` to be objects {date, slots}. 
-                // However to avoid massive refactor of the whole file, I will just patch `getAvailableSlots` in a followup to include a "dummy" slot or just metadata.
-
-                // actually I will refactor `getAvailableSlots` slightly in the next step to store [{date:..., slots: [...]}, ...] instead of [[slot, slot], ...]
-                // But for now, let's assume I will fix the data structure.
-
                 return (
                   <div
                     key={index}
@@ -296,11 +291,10 @@ const Service = () => {
                       }`}
                   >
                     <span className="text-[10px] uppercase font-bold tracking-tighter mb-1 opacity-70">
-                      {/* Placeholder, will need valid date source */}
-                      {item.length > 0 ? daysOfWeek[item[0].dateTime.getDay()] : "..."}
+                      {daysOfWeek[item.date.getDay()]}
                     </span>
                     <span className="text-xl font-black">
-                      {item.length > 0 ? item[0].dateTime.getDate() : "?"}
+                      {item.date.getDate()}
                     </span>
                   </div>
                 )
@@ -333,18 +327,22 @@ const Service = () => {
               ref={timesRef}
               className="flex gap-3 overflow-x-auto scrollbar-hide pb-4 px-1 snap-x"
             >
-              {serviceSlots.length > 0 && serviceSlots[slotIndex].map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSlotTime(item.time)}
-                  className={`text-sm font-bold shrink-0 px-6 py-3 rounded-xl cursor-pointer transition-all duration-300 border snap-start ${item.time === slotTime
-                    ? "bg-primary-gradient border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
-                    : "bg-white/5 border-white/5 text-gray-400 hover:border-white/20 hover:bg-white/10"
-                    }`}
-                >
-                  {item.time}
-                </button>
-              ))}
+              {serviceSlots.length > 0 && serviceSlots[slotIndex].slots.length > 0 ? (
+                serviceSlots[slotIndex].slots.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSlotTime(item.time)}
+                    className={`text-sm font-bold shrink-0 px-6 py-3 rounded-xl cursor-pointer transition-all duration-300 border snap-start ${item.time === slotTime
+                      ? "bg-primary-gradient border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
+                      : "bg-white/5 border-white/5 text-gray-400 hover:border-white/20 hover:bg-white/10"
+                      }`}
+                  >
+                    {item.time}
+                  </button>
+                ))
+              ) : (
+                <p className="text-gray-500 italic py-2">Съжаляваме, няма налични часове за този ден.</p>
+              )}
             </div>
 
             <button
