@@ -36,7 +36,7 @@ const Navbar = () => {
       {/* Burger Button (Mobile Only Overlay) */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden absolute top-4 right-6 z-[60] p-2 bg-transparent backdrop-blur-md rounded-xl shadow-lg border border-white/30 active:scale-95 transition-all flex items-center justify-center group"
+        className="md:hidden absolute top-4 right-6 z-[60] p-2 bg-white/5 backdrop-blur-md rounded-xl shadow-lg border border-white/30 active:scale-95 transition-all flex items-center justify-center group"
       >
         {isMobileMenuOpen ? (
           <X className="w-6 h-6 text-gray-900" />
