@@ -33,15 +33,15 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Burger Button (Mobile Only) */}
+      {/* Burger Button (Mobile Only Overlay) */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed top-4 right-4 z-[60] p-2 bg-white rounded-lg shadow-md border border-gray-100 active:scale-90 transition-transform flex items-center justify-center"
+        className="md:hidden absolute top-6 right-6 z-[60] p-3 bg-white/80 backdrop-blur-md rounded-xl shadow-lg border border-white/20 active:scale-95 transition-all flex items-center justify-center group"
       >
         {isMobileMenuOpen ? (
-          <X className="w-6 h-6 text-gray-600" />
+          <X className="w-6 h-6 text-gray-900" />
         ) : (
-          <Menu className="w-6 h-6 text-gray-600" />
+          <Menu className="w-6 h-6 text-gray-900 group-hover:text-amber-600 transition-colors" />
         )}
       </button>
 
@@ -54,13 +54,22 @@ const Navbar = () => {
       )}
 
       <nav
-        className={`admin-nav ${sideBarCollapsed ? "collapsed" : ""} ${
-          isMobileMenuOpen
-            ? "translate-x-0"
-            : "-translate-x-full md:translate-x-0"
-        }`}
+        className={`admin-nav ${sideBarCollapsed ? "collapsed" : ""} ${isMobileMenuOpen
+          ? "translate-x-0"
+          : "-translate-x-full md:translate-x-0"
+          } overflow-hidden`}
       >
-        <div className="admin-nav-inner flex flex-col h-full">
+        {/* Mobile-only Background Image */}
+        <div className="md:hidden absolute inset-0 pointer-events-none opacity-10 grayscale">
+          <img
+            src="/images/Live-Well-in-Strand-cover-.png"
+            alt="Dashboard Background"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white"></div>
+        </div>
+
+        <div className="admin-nav-inner flex flex-col h-full relative z-10">
           {/* Logo Section */}
           <div className="admin-logo-container relative mb-4">
             <img
@@ -79,9 +88,8 @@ const Navbar = () => {
               className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-200 rounded-full items-center justify-center shadow-sm cursor-pointer hover:bg-gray-50 z-10"
             >
               <ChevronLeft
-                className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                  sideBarCollapsed ? "rotate-180" : ""
-                }`}
+                className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${sideBarCollapsed ? "rotate-180" : ""
+                  }`}
               />
             </button>
           </div>
