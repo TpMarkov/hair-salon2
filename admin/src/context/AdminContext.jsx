@@ -30,65 +30,71 @@ const AdminContextProvider = (props) => {
     }
   }, [backendUrl])
 
-  // Initialize Socket.IO connection (only works in local development, not serverless)
+  // Initialize Socket.IO connection or Polling fallback
   useEffect(() => {
     if (!backendUrl) return
 
-    // Check if we're in production/serverless environment
     const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')
 
     if (isProduction) {
-      // In serverless/production, Socket.IO doesn't work - skip connection silently
-      console.log('Socket.IO disabled in serverless environment')
-      return
-    }
+      // In serverless/production (Vercel), we use Short Polling
+      console.log('Socket.IO disabled in serverless environment - Switching to polling')
+      setIsConnected(true) // Set to true to show "Live" status in UI via polling
+
+      const intervalId = setInterval(() => {
+        getAllAppointments()
+      }, 30000) // Poll every 30 seconds
+
+      return () => {
+        clearInterval(intervalId)
+        setIsConnected(false)
+      }
+    } else {
+      // Only connect in local development
+      const socketInstance = io(backendUrl, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 3,
+        reconnectionDelay: 1000,
+        timeout: 5000,
+        autoConnect: true
+      })
 
 
-    // TODO: Find a way to update appointments withoud using sockets or use sockets for production
-    // Only connect in local development
-    const socketInstance = io(backendUrl, {
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: 3,
-      reconnectionDelay: 1000,
-      timeout: 5000,
-      autoConnect: true
-    })
+      socketInstance.on('connect', () => {
+        console.log('Socket.IO connected:', socketInstance.id)
+        setIsConnected(true)
+      })
 
+      socketInstance.on('disconnect', () => {
+        console.log('Socket.IO disconnected')
+        setIsConnected(false)
+      })
 
-    socketInstance.on('connect', () => {
-      console.log('Socket.IO connected:', socketInstance.id)
-      setIsConnected(true)
-    })
-
-    socketInstance.on('disconnect', () => {
-      console.log('Socket.IO disconnected')
-      setIsConnected(false)
-    })
-
-    socketInstance.on('connect_error', () => {
-      // Suppress error messages in production/serverless
-      console.log('Socket.IO connection unavailable (expected in serverless)')
-      socketInstance.disconnect()
-      setIsConnected(false)
-    })
-
-    socketInstance.on('appointmentCreated', () => {
-      console.log('New appointment received')
-      toast.info('New appointment created!')
-      getAllAppointments() // Refresh appointments list
-    })
-
-    socketInstance.on('appointmentCancelled', () => {
-      console.log('Appointment cancelled')
-      toast.info('Appointment cancelled by user!')
-      getAllAppointments() // Refresh appointments list
-    })
-
-    // Cleanup on unmount
-    return () => {
-      if (socketInstance && socketInstance.connected) {
+      socketInstance.on('connect_error', () => {
+        console.log('Socket.IO connection unavailable')
         socketInstance.disconnect()
+        setIsConnected(false)
+      })
+
+      socketInstance.on('appointmentCreated', () => {
+        console.log('New appointment received')
+        toast.info('New appointment created!')
+        getAllAppointments()
+      })
+
+      socketInstance.on('appointmentCancelled', () => {
+        console.log('Appointment cancelled')
+        toast.info('Appointment cancelled by user!')
+        getAllAppointments()
+      })
+
+      // Cleanup on unmount
+      return () => {
+        if (socketInstance) {
+          socketInstance.disconnect()
+        }
+        setIsConnected(false)
       }
     }
   }, [backendUrl, getAllAppointments])
