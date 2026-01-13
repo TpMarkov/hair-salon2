@@ -109,8 +109,6 @@ const Contact = () => {
       );
   };
 
-  consaole.log("Somehting");
-
   return (
     <div
       ref={sectionRef}
