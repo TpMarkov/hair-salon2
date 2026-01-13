@@ -1,7 +1,7 @@
-import React, {createContext, useState, useEffect, useCallback} from 'react'
+import React, { createContext, useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
-import {toast} from "react-toastify";
-import {io} from 'socket.io-client'
+import { toast } from "react-toastify";
+import { io } from 'socket.io-client'
 
 export const AdminContext = createContext()
 
@@ -17,7 +17,7 @@ const AdminContextProvider = (props) => {
   const getAllAppointments = useCallback(async () => {
     if (!backendUrl) return
     try {
-      const {data} = await axios.get(`${backendUrl}/api/appointment/list`)
+      const { data } = await axios.get(`${backendUrl}/api/appointment/list`)
       if (data.success) {
         setAppointments(data.appointments.reverse())
         console.log(data.appointments)
@@ -98,7 +98,7 @@ const AdminContextProvider = (props) => {
 
   const getAllServices = async () => {
     try {
-      const {data} = await axios.get(backendUrl + '/api/service/list')
+      const { data } = await axios.get(backendUrl + '/api/service/list')
       if (data.success) {
         setServices(data.services)
       } else {
@@ -118,9 +118,9 @@ const AdminContextProvider = (props) => {
   }
 
   return (
-      <AdminContext.Provider value={value}>
-        {props.children}
-      </AdminContext.Provider>
+    <AdminContext.Provider value={value}>
+      {props.children}
+    </AdminContext.Provider>
   )
 
 }

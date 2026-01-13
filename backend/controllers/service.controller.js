@@ -50,7 +50,7 @@ const addService = async (req, res) => {
 // API for listing all services
 const listServices = async (req, res) => {
     try {
-        const services = await serviceModel.find({})
+        const services = await serviceModel.find({}).sort({ createdAt: -1 })
         res.json({ success: true, services })
     } catch (error) {
         console.log(error)
