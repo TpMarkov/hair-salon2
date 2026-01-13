@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import emailjs from '@emailjs/browser';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import emailjs from "@emailjs/browser";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,64 +17,66 @@ const Contact = () => {
   useEffect(() => {
     const mm = gsap.matchMedia();
 
+    mm.add(
+      {
+        isDesktop: "(min-width: 1024px)",
+        isMobile: "(max-width: 1023px)",
+      },
+      (context) => {
+        let { isDesktop } = context.conditions;
 
-    mm.add({
-      isDesktop: "(min-width: 1024px)",
-      isMobile: "(max-width: 1023px)"
-    }, (context) => {
-      let { isDesktop } = context.conditions;
+        // Title animation
+        gsap.from(titleRef.current, {
+          y: 30,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+        });
 
-      // Title animation
-      gsap.from(titleRef.current, {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out"
-      });
+        // Image animation
+        gsap.from(imageRef.current, {
+          scrollTrigger: {
+            trigger: imageRef.current,
+            start: "top 85%",
+          },
+          x: isDesktop ? -50 : 0,
+          y: isDesktop ? 0 : 30,
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.out",
+        });
 
-      // Image animation
-      gsap.from(imageRef.current, {
-        scrollTrigger: {
-          trigger: imageRef.current,
-          start: "top 85%",
-        },
-        x: isDesktop ? -50 : 0,
-        y: isDesktop ? 0 : 30,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power2.out"
-      });
+        // Info animation
+        gsap.from(infoRef.current, {
+          scrollTrigger: {
+            trigger: infoRef.current,
+            start: "top 85%",
+          },
+          x: isDesktop ? 50 : 0,
+          y: isDesktop ? 0 : 30,
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.out",
+          delay: 0.2,
+        });
 
-      // Info animation
-      gsap.from(infoRef.current, {
-        scrollTrigger: {
-          trigger: infoRef.current,
-          start: "top 85%",
-        },
-        x: isDesktop ? 50 : 0,
-        y: isDesktop ? 0 : 30,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power2.out",
-        delay: 0.2
-      });
-
-      // Form animation
-      gsap.from(formRef.current, {
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 85%",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power2.out",
-        delay: 0.4
-      });
-    }, sectionRef);
+        // Form animation
+        gsap.from(formRef.current, {
+          scrollTrigger: {
+            trigger: formRef.current,
+            start: "top 85%",
+          },
+          y: 50,
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.out",
+          delay: 0.4,
+        });
+      },
+      sectionRef
+    );
 
     window.scrollTo(0, 0);
-
 
     return () => mm.revert();
   }, []);
@@ -107,9 +109,11 @@ const Contact = () => {
       );
   };
 
-
   return (
-    <div ref={sectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div
+      ref={sectionRef}
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+    >
       {/* Header Section */}
       <div ref={titleRef} className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">
@@ -121,8 +125,10 @@ const Contact = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-24">
         {/* Left Side: Image and Info */}
         <div className="space-y-12">
-          <div ref={imageRef}
-            className="relative group overflow-hidden rounded-2xl shadow-xl aspect-[16/9] bg-gray-100">
+          <div
+            ref={imageRef}
+            className="relative group overflow-hidden rounded-2xl shadow-xl aspect-[16/9] bg-gray-100"
+          >
             <img
               src="/images/contact_hero.png"
               alt="Salon Interior"
@@ -134,7 +140,9 @@ const Contact = () => {
 
           <div ref={infoRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">Нашият Салон</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Нашият Салон
+              </h3>
               <div className="space-y-2 text-gray-600">
                 <p className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-yellow-500 rounded-full" />
@@ -152,7 +160,9 @@ const Contact = () => {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">Работно Време</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Работно Време
+              </h3>
               <div className="space-y-2 text-gray-600">
                 <p>Пон - Пет: 10:00 - 19:00</p>
                 <p>Събота: 10:00 - 18:00</p>
@@ -166,7 +176,9 @@ const Contact = () => {
                 className="text-gray-800 font-medium hover:text-yellow-600 transition-colors flex items-center gap-2 group"
               >
                 Научете повече за нас
-                <span className="transform transition-transform group-hover:translate-x-1">→</span>
+                <span className="transform transition-transform group-hover:translate-x-1">
+                  →
+                </span>
               </button>
             </div>
           </div>
@@ -188,7 +200,9 @@ const Contact = () => {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Email</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Email
+                </label>
                 <input
                   required
                   type="email"
@@ -209,7 +223,9 @@ const Contact = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Съобщение</label>
+              <label className="text-sm font-medium text-gray-700">
+                Съобщение
+              </label>
               <textarea
                 required
                 rows="4"
