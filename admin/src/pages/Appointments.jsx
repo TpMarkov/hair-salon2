@@ -55,9 +55,9 @@ const Appointments = () => {
   return (
     <div className="w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-6">
       <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-        <p className="text-2xl font-bold text-gray-800 w-full sm:w-auto">
-          All Appointments
-        </p>
+        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight w-full sm:w-auto">
+          All <span className="text-amber-600">Appointments</span>
+        </h1>
         <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
           <button
             onClick={handleRefresh}
@@ -91,9 +91,8 @@ const Appointments = () => {
             <div className="w-px h-4 bg-gray-200 hidden sm:block"></div>
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <div
-                className={`w-2 h-2 rounded-full ${
-                  isConnected ? "bg-green-500" : "bg-gray-400"
-                }`}
+                className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-gray-400"
+                  }`}
               ></div>
               <span className="hidden sm:inline">Updated:</span>
               <span>
