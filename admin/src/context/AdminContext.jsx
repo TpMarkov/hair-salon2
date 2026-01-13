@@ -43,6 +43,7 @@ const AdminContextProvider = (props) => {
 
       const intervalId = setInterval(() => {
         getAllAppointments()
+        getAllServices()
       }, 30000) // Poll every 30 seconds
 
       return () => {
