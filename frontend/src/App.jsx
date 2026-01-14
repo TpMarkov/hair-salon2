@@ -10,6 +10,7 @@ import Appointment from "./pages/Appointment.jsx";
 import Navbar from "./components/Navbar.jsx";
 import ServicesList from "./components/ServicesList.jsx";
 import Footer from "./components/Footer.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/appointment/:type" element={<Appointment />} />
       </Routes>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
