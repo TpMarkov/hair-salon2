@@ -1,28 +1,4 @@
-import { DownloadIcon } from "lucide-react";
-import { AppContext } from "../context/AppContext.jsx";
-
 const Banner = () => {
-  const APP_URL = "https://hair-salon-frontend-rho.vercel.app/app-release.apk";
-
-  const downlaodFileAtUrl = async (url) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-
-    const blobUrl = window.URL.createObjectURL(blob);
-    const aTag = document.createElement("a");
-
-    aTag.href = blobUrl;
-    aTag.download = "app-release.apk";
-    document.body.appendChild(aTag);
-
-    aTag.click();
-
-    aTag.remove();
-    window.URL.revokeObjectURL(blobUrl);
-  };
-
-  //TODO : Implement proper download logic
-
   return (
     <div
       className="relative overflow-hidden rounded-3xl bg-black/40 border border-white/5 shadow-2xl my-20 mx-4 md:mx-10 group">
@@ -41,17 +17,8 @@ const Banner = () => {
               Присъедини се към нашите доволни клиенти и се възползвай от
               професионална грижа за твоята коса.
             </p>
-            {/*{!userData && (*/}
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <button
-                onClick={() => downlaodFileAtUrl(APP_URL)}
-                className="md:hidden group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95 cursor-pointer w-full sm:w-auto justify-center"
-              >
-                <DownloadIcon size={24} />
-                <span>Изтегли приложението</span>
-              </button>
-
-              <div className="hidden md:flex items-center gap-7 bg-white/5 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/10 shadow-2xl">
+              <div className="hidden lg:flex items-center gap-7 bg-white/5 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/10 shadow-2xl">
                 <div className="bg-white p-3 rounded-2xl shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
                   <img
                     src="/images/qr.png"
@@ -64,7 +31,6 @@ const Banner = () => {
                 </p>
               </div>
             </div>
-            ){/*}*/}
           </div>
         </div>
 
@@ -87,6 +53,3 @@ const Banner = () => {
 };
 
 export default Banner;
-
-
-
