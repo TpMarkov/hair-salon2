@@ -5,7 +5,7 @@ const Banner = () => {
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-0" />
 
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-[1.25rem]">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between pl-[1.25rem]">
         {/* Left Side: Content */}
         <div className="flex-1 py-12 px-8 sm:px-12 md:py-20 lg:py-28 lg:pl-16">
           <div className="max-w-xl space-y-6">
