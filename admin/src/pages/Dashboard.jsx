@@ -28,14 +28,6 @@ const Dashboard = () => {
         if (adminToken) {
             getAllAppointments()
             getAllServices()
-
-            // High-frequency polling while on dashboard for "Live" feel
-            const interval = setInterval(() => {
-                getAllAppointments()
-                getAllServices()
-            }, 15000) // 15 seconds
-
-            return () => clearInterval(interval)
         }
     }, [adminToken, getAllAppointments, getAllServices])
 
