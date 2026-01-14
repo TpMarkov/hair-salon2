@@ -10,7 +10,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative h-[500px] md:h-[600px] lg:h-[700px] w-full overflow-hidden rounded-2xl shadow-2xl">
+    <div className="relative h-[550px] md:h-[650px] lg:h-[800px] w-[calc(100%+2.5rem)] mx-[-1.25rem] overflow-hidden group">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-110"
@@ -21,7 +21,7 @@ const Header = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
 
       {/* Content Container */}
-      <div className="relative h-full flex flex-col items-start justify-center px-8 md:px-16 lg:px-24 z-10 max-w-4xl">
+      <div className="relative h-full flex flex-col items-start justify-center pl-[calc(2rem+1.25rem)] md:pl-[calc(4rem+1.25rem)] lg:pl-[calc(6rem+1.25rem)] pr-8 z-10 max-w-7xl">
         {/* Basic */}
         {/* <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
           Погрижете се за <span className="text-gold whitespace-nowrap">косата си</span> <br />
