@@ -1,8 +1,8 @@
 import express from "express"
 import cors from "cors"
 import 'dotenv/config'
-import {createServer} from 'http'
-import {Server} from 'socket.io'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import appointmentRouter from "./routes/appointment.route.js";
@@ -59,7 +59,8 @@ app.use(cors({
       callback(null, true);
     } else {
       console.log("Blocked by CORS:", origin);
-      callback(new Error('Not allowed by CORS'));
+      // In production/serverless, avoid passing an Error object that triggers 500 handler
+      callback(null, false);
     }
   },
   credentials: true
@@ -80,7 +81,7 @@ app.use("/api/user", userRouter)
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Global Error Handler:", err.stack);
-  res.status(500).json({success: false, message: "Internal Server Error", error: err.message});
+  res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
 });
 
 // Startup function

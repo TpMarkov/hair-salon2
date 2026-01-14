@@ -14,19 +14,19 @@ export const loginAdmin = async (req, res) => {
   const jwtSecret = process.env.JWT_SECRET
 
   try {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     if (email === adminEmail && password === adminPassword) {
-
-      const token = jwt.sign(email + password, jwtSecret)
-      res.json({success: true, token});
+      // payload as object, added expiration
+      const token = jwt.sign({ email }, jwtSecret, { expiresIn: '7d' })
+      res.json({ success: true, token });
 
     } else {
-      res.json({success: false, message: 'Email or password is incorrect'});
+      res.json({ success: false, message: 'Email or password is incorrect' });
     }
 
   } catch (err) {
     console.log(err);
-    res.json({success: false, message: err.message});
+    res.json({ success: false, message: err.message });
   }
 }

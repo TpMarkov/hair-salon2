@@ -17,7 +17,7 @@ const AdminContextProvider = (props) => {
   const getAllAppointments = useCallback(async () => {
     if (!backendUrl) return
     try {
-      const { data } = await axios.get(`${backendUrl}/api/appointment/list`)
+      const { data } = await axios.get(`${backendUrl}/api/appointment/list`, { headers: { admintoken: adminToken } })
       if (data.success) {
         setAppointments(data.appointments.reverse())
         console.log(data.appointments)
@@ -28,7 +28,7 @@ const AdminContextProvider = (props) => {
       console.log(error)
       toast.error(error.message)
     }
-  }, [backendUrl])
+  }, [backendUrl, adminToken])
 
   // Initialize Socket.IO connection or Polling fallback
   useEffect(() => {
@@ -105,7 +105,7 @@ const AdminContextProvider = (props) => {
 
   const getAllServices = async () => {
     try {
-      const { data } = await axios.get(backendUrl + '/api/service/list')
+      const { data } = await axios.get(backendUrl + '/api/service/list', { headers: { admintoken: adminToken } })
       if (data.success) {
         setServices(data.services)
       } else {
