@@ -44,11 +44,10 @@ const Navbar = () => {
 
   return (
     <div
-      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${
-        isScrolled
+      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${isScrolled
           ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
           : "bg-transparent"
-      }`}
+        }`}
     >
       <div
         className="flex items-center cursor-pointer"
@@ -94,7 +93,7 @@ const Navbar = () => {
             <img
               src={userData?.image || "/images/golden_avatar.png"}
               alt="user-image"
-              className="w-10 rounded-full"
+              className="w-10 h-10 rounded-full object-cover"
               onError={(e) => {
                 e.currentTarget.src = "/images/golden_avatar.png";
               }}
@@ -153,9 +152,8 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${
-          showMenu ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-        } flex flex-col h-screen overflow-y-auto`}
+        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${showMenu ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          } flex flex-col h-screen overflow-y-auto`}
       >
         {/* Menu Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white sticky top-0 z-10">
@@ -183,10 +181,9 @@ const Navbar = () => {
                 to={link.href}
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${
-                    isActive
-                      ? "text-gold bg-amber-500/5 shadow-sm border border-gold/10"
-                      : "text-gray-500 hover:text-gold hover:bg-gray-50"
+                  `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${isActive
+                    ? "text-gold bg-amber-500/5 shadow-sm border border-gold/10"
+                    : "text-gray-500 hover:text-gold hover:bg-gray-50"
                   }`
                 }
               >
