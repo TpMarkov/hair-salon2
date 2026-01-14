@@ -4,6 +4,7 @@ import Services from "./Service.jsx";
 import ServicesMenu from "../components/ServicesMenu.jsx";
 import ServicesList from "../components/ServicesList.jsx";
 import Banner from "../components/Banner.jsx";
+import ScrollToTop from "../components/ScrollToTop.jsx";
 import { useEffect } from "react";
 
 const Home = () => {
@@ -21,6 +22,7 @@ const Home = () => {
       <ServicesMenu />
       <Banner />
       <ServicesList />
+      <ScrollToTop />
     </main>
   )
 }
