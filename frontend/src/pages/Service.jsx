@@ -9,16 +9,9 @@ import { io } from "socket.io-client"
 
 const Service = () => {
   const navigate = useNavigate()
-  const [serviceSlots, setServiceSlots] = useState([])
-  const [slotIndex, setSlotIndex] = useState(0)
-  const [slotTime, setSlotTime] = useState("")
-  const daysOfWeek = ["Нед", "Пон", "Вто", "Сря", "Чет", "Пет", "Съб",]
-
-  const { backendUrl, getAppointments, services, token } = useContext(AppContext)
-
-
   const daysRef = useRef(null)
   const timesRef = useRef(null)
+  const daysOfWeek = ["Нед", "Пон", "Вто", "Сря", "Чет", "Пет", "Съб"]
 
   const scrollContainer = (ref, direction) => {
     if (ref.current) {
@@ -26,19 +19,17 @@ const Service = () => {
       ref.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   }
-
   const { type } = useParams()
+  const { backendUrl, getAppointments, services, token } = useContext(AppContext)
 
   // find service by slug (or type if you didn’t add slug)
   const service = services.find(
     s => s.slug === type || s.type === type
   )
 
-
-  if (!service) {
-    return <h2 className="text-center text-red-500">Service not found</h2>
-  }
-
+  const [serviceSlots, setServiceSlots] = useState([])
+  const [slotIndex, setSlotIndex] = useState(0)
+  const [slotTime, setSlotTime] = useState("")
   const [bookedSlots, setBookedSlots] = useState([])
 
   const fetchBookedSlots = async () => {
@@ -165,6 +156,10 @@ const Service = () => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [service])
+
+  if (!service) {
+    return <h2 className="text-center text-red-500">Service not found</h2>
+  }
 
   const bookAppointment = async () => {
     try {
