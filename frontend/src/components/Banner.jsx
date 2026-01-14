@@ -21,6 +21,8 @@ const Banner = () => {
     window.URL.revokeObjectURL(blobUrl);
   };
 
+  //TODO : Implement proper download logic
+
   return (
     <div
       className="relative overflow-hidden rounded-3xl bg-black/40 border border-white/5 shadow-2xl my-20 mx-4 md:mx-10 group">
