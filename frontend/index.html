@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/logo.png" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-      description="Най-добрият фризьорски салон в Ловеч (5500). Предлагаме подстригване, боядисване, официални прически и терапии за коса. Запишете час онлайн!"
-    />
-    <title>Фризьорски Салон в Ловеч | Професионални Фризьорски Услуги</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/images/logo.png" />
+
+  <!-- Preload Critical Assets -->
+  <link rel="preload" href="/fonts/pacifico-regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+  <link rel="preload" href="/images/logo.png" as="image" />
+  <link rel="preload" href="/images/hero_bg_optimized.png" as="image" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"
+    description="Най-добрият фризьорски салон в Ловеч (5500). Предлагаме подстригване, боядисване, официални прически и терапии за коса. Запишете час онлайн!" />
+  <title>Фризьорски Салон в Ловеч | Професионални Фризьорски Услуги</title>
+
+  <!-- Critical CSS to prevent FOUC and speed up initial render -->
+  <style>
+    :root {
+      --color-primary-start: #fcd34d;
+      --color-primary-middle: #eab308;
+      --color-primary-end: #b45309;
+    }
+
+    .logo-font {
+      font-family: "Logo-Font", sans-serif !important;
+    }
+
+    @font-face {
+      font-family: "Logo-Font";
+      src: url("/fonts/pacifico-regular.ttf") format("truetype");
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    .bg-primary-gradient {
+      background-image: linear-gradient(to right, var(--color-primary-start), var(--color-primary-middle), var(--color-primary-end));
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

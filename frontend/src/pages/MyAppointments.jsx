@@ -72,6 +72,8 @@ const MyAppointments = () => {
                 <img
                   src={item.serviceData.image}
                   alt={item.serviceData.type}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
@@ -153,8 +155,8 @@ const MyAppointments = () => {
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 1
-                ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
-                : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
+              ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
+              : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
               }`}
           >
             <ChevronLeft size={24} />
@@ -166,8 +168,8 @@ const MyAppointments = () => {
                 key={i}
                 onClick={() => handlePageChange(i + 1)}
                 className={`w-10 h-10 rounded-xl font-bold transition-all duration-300 ${currentPage === i + 1
-                    ? "bg-primary-gradient text-white shadow-lg shadow-amber-500/20"
-                    : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5"
+                  ? "bg-primary-gradient text-white shadow-lg shadow-amber-500/20"
+                  : "bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5"
                   }`}
               >
                 {i + 1}
@@ -179,8 +181,8 @@ const MyAppointments = () => {
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className={`p-2 rounded-xl transition-all duration-300 ${currentPage === totalPages
-                ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
-                : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
+              ? "text-gray-600 bg-white/5 cursor-not-allowed opacity-50"
+              : "text-white bg-white/10 hover:bg-primary-gradient border border-white/10 cursor-pointer"
               }`}
           >
             <ChevronRight size={24} />

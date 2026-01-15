@@ -86,6 +86,8 @@ const Login = () => {
           <img
             src="/images/login_hero_optimized.png"
             alt="Salon Interior"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/20" />

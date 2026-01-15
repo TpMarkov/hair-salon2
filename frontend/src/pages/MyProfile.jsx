@@ -96,6 +96,8 @@ const MyProfile = () => {
                       : userData?.image || "/images/golden_avatar.png"
                   }
                   alt="Profile"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     e.currentTarget.src = "/images/golden_avatar.png";

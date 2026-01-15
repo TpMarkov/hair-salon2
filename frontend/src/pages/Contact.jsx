@@ -132,6 +132,8 @@ const Contact = () => {
             <img
               src="/images/contact_hero_optimized.png"
               alt="Salon Interior"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
               onLoad={handleImageLoad}
             />
