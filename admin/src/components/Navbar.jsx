@@ -54,10 +54,11 @@ const Navbar = () => {
       )}
 
       <nav
-        className={`admin-nav ${sideBarCollapsed ? "collapsed" : ""} ${isMobileMenuOpen
-          ? "translate-x-0"
-          : "-translate-x-full md:translate-x-0"
-          }`}
+        className={`admin-nav ${sideBarCollapsed ? "collapsed" : ""} ${
+          isMobileMenuOpen
+            ? "translate-x-0"
+            : "-translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Mobile-only Background Image */}
         <div className="md:hidden absolute inset-0 pointer-events-none opacity-10 grayscale">
@@ -74,7 +75,7 @@ const Navbar = () => {
           <div className="admin-logo-container relative mb-4">
             <img
               className="w-12 md:w-24 cursor-pointer"
-              src={"/images/logo.png"}
+              src={"/images/compressed/logo.png"}
               alt="admin-logo"
               onClick={() => navigate("/")}
             />
@@ -88,8 +89,9 @@ const Navbar = () => {
               className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-200 rounded-full items-center justify-center shadow-sm cursor-pointer hover:bg-gray-50 z-[70]"
             >
               <ChevronLeft
-                className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${sideBarCollapsed ? "rotate-180" : ""
-                  }`}
+                className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                  sideBarCollapsed ? "rotate-180" : ""
+                }`}
               />
             </button>
           </div>
