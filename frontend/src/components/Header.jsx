@@ -11,10 +11,12 @@ const Header = () => {
 
   return (
     <div className="relative h-[550px] md:h-[650px] lg:h-[800px] w-[calc(100%+2.5rem)] mx-[-1.25rem] overflow-hidden group">
-      {/* Background Image - Eagerly loaded for better LCP (Largest Contentful Paint) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-110"
-        style={{ backgroundImage: "url('/images/hero_bg_optimized.png')" }}
+      {/* Background Image - Optimized for LCP discovery with <img> tag and fetchpriority */}
+      <img
+        src="/images/hero_bg_optimized.png"
+        alt=""
+        fetchpriority="high"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[20s] hover:scale-110"
       />
 
       {/* Gradient Overlay for Readability */}
