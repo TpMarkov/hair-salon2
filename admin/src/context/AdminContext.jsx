@@ -12,6 +12,7 @@ const AdminContextProvider = (props) => {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [dashData, setDashData] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -51,6 +52,22 @@ const AdminContextProvider = (props) => {
     }
   }, [backendUrl, adminToken]);
 
+  const getDashData = useCallback(async () => {
+    if (!backendUrl) return;
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/admin/dashboard-stats`, {
+        headers: { admintoken: adminToken },
+      });
+      if (data.success) {
+        setDashData(data.stats);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }, [backendUrl, adminToken]);
+
   // Initialize Socket.IO connection or Polling fallback
   useEffect(() => {
     if (!backendUrl) return;
@@ -69,6 +86,7 @@ const AdminContextProvider = (props) => {
       const intervalId = setInterval(() => {
         getAllAppointments();
         getAllServices();
+        getDashData();
       }, 30000); // Poll every 30 seconds
 
       return () => {
@@ -122,7 +140,7 @@ const AdminContextProvider = (props) => {
         setIsConnected(false);
       };
     }
-  }, [backendUrl, getAllAppointments, getAllServices]);
+  }, [backendUrl, getAllAppointments, getAllServices, getDashData]);
 
 
   const value = {
@@ -136,6 +154,8 @@ const AdminContextProvider = (props) => {
     isConnected,
     services,
     getAllServices,
+    dashData,
+    getDashData,
   };
 
   return (

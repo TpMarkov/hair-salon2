@@ -15,10 +15,8 @@ import { useNavigate } from 'react-router-dom'
 const Dashboard = () => {
     const {
         adminToken,
-        appointments,
-        getAllAppointments,
-        services,
-        getAllServices,
+        dashData,
+        getDashData,
         isConnected
     } = useContext(AdminContext)
 
@@ -26,22 +24,21 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (adminToken) {
-            getAllAppointments()
-            getAllServices()
+            getDashData()
         }
-    }, [adminToken, getAllAppointments, getAllServices])
+    }, [adminToken, getDashData])
 
     const stats = [
         {
             label: 'Total Appointments',
-            value: appointments.length,
+            value: dashData ? dashData.appointmentsCount : 0,
             icon: Calendar,
             color: 'text-amber-600',
             bg: 'bg-amber-100'
         },
         {
             label: 'Active Services',
-            value: services.length,
+            value: dashData ? dashData.servicesCount : 0,
             icon: Scissors,
             color: 'text-blue-600',
             bg: 'bg-blue-100'
