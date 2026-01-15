@@ -45,8 +45,8 @@ const Navbar = () => {
   return (
     <div
       className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${isScrolled
-          ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
-          : "bg-transparent"
+        ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
+        : "bg-transparent"
         }`}
     >
       <div
@@ -144,6 +144,7 @@ const Navbar = () => {
         {/* Burger Menu Icon (Mobile Only) */}
         <button
           onClick={() => setShowMenu(true)}
+          aria-label="Отвори менюто"
           className="md:hidden p-2 text-gray-600 hover:text-gold transition-all duration-300 bg-white rounded-xl shadow-md border border-gray-100"
         >
           <Menu size={28} />
@@ -165,6 +166,7 @@ const Navbar = () => {
           </div>
           <button
             onClick={() => setShowMenu(false)}
+            aria-label="Затвори менюто"
             className="p-3 text-gray-600 hover:text-red-500 transition-colors bg-gray-50 rounded-xl active:scale-95"
           >
             <X size={30} />

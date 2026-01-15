@@ -26,13 +26,31 @@ const Footer = () => {
             Повече от салон – място за стил, увереност и грижа. Работим с внимание към всеки детайл, защото вярваме, че красотата започва с правилното отношение.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors">
+            <a
+              href="https://www.facebook.com/profile.php?id=61553067962651"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Посетете нашата Facebook страница"
+              className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors"
+            >
               <Facebook size={20} />
             </a>
-            <a href="#" className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors">
+            <a
+              href="https://www.instagram.com/markowcvetan?igsh=MnN1aTB6bWxtd2w4"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Посетете нашия Instagram профил"
+              className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors"
+            >
               <Instagram size={20} />
             </a>
-            <a href="#" className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors">
+            <a
+              href="https://www.facebook.com/profile.php?id=61553067962651"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Посетете профила ни в Twitter"
+              className="p-2 bg-stone-50 rounded-full text-gray-400 hover:text-yellow-600 hover:bg-stone-100 transition-colors"
+            >
               <Twitter size={20} />
             </a>
           </div>
