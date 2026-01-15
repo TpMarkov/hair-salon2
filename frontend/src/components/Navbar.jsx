@@ -44,10 +44,11 @@ const Navbar = () => {
 
   return (
     <div
-      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${isScrolled
-        ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
-        : "bg-transparent"
-        }`}
+      className={`nav-bar z-50 sticky top-0 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/70 backdrop-blur-md shadow-sm border-b-white/20"
+          : "bg-transparent"
+      }`}
     >
       <div
         className="flex items-center cursor-pointer"
@@ -55,7 +56,7 @@ const Navbar = () => {
       >
         <a href="/">
           <img
-            src="/images/logo.png"
+            src="/compressed/logo.png"
             alt="logo"
             className="w-15 h-15 cursor-pointer"
           />
@@ -153,13 +154,14 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${showMenu ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-          } flex flex-col h-screen overflow-y-auto`}
+        className={`fixed inset-0 z-[999] bg-white transition-all duration-500 ease-in-out transform ${
+          showMenu ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        } flex flex-col h-screen overflow-y-auto`}
       >
         {/* Menu Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white sticky top-0 z-10">
           <div className="flex items-center">
-            <img src="/images/logo.png" alt="logo" className="w-12 h-12" />
+            <img src="/compressed/logo.png" alt="logo" className="w-12 h-12" />
             <p className="logo-font text-xl text-gold ml-3 font-bold">
               Hair Salon
             </p>
@@ -183,9 +185,10 @@ const Navbar = () => {
                 to={link.href}
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${isActive
-                    ? "text-gold bg-amber-500/5 shadow-sm border border-gold/10"
-                    : "text-gray-500 hover:text-gold hover:bg-gray-50"
+                  `w-full text-center text-2xl font-black uppercase tracking-[0.2em] py-4 rounded-2xl transition-all duration-300 ${
+                    isActive
+                      ? "text-gold bg-amber-500/5 shadow-sm border border-gold/10"
+                      : "text-gray-500 hover:text-gold hover:bg-gray-50"
                   }`
                 }
               >

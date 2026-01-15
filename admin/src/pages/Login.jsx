@@ -42,7 +42,7 @@ const Login = () => {
         <div className="flex flex-col items-center mb-8">
           <img
             className="w-40 mb-4"
-            src={"/images/logo.png"}
+            src={"/compressed/logo.png"}
             alt="Admin Logo"
           />
           <h2 className="text-2xl font-bold text-gray-800">
