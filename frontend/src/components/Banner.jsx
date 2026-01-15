@@ -1,7 +1,6 @@
 const Banner = () => {
   return (
-    <div
-      className="relative overflow-hidden bg-black/60 w-[calc(100%+2.5rem)] mx-[-1.25rem] my-24 group">
+    <div className="relative overflow-hidden bg-black/60 w-[calc(100%+2.5rem)] mx-[-1.25rem] my-24 group">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-0" />
 
@@ -27,7 +26,8 @@ const Banner = () => {
                   />
                 </div>
                 <p className="text-gray-200 text-lg font-bold leading-snug max-w-[200px]">
-                  Сканирай QR кода за да изтеглиш приложението на мобилното си устройство
+                  Сканирай QR кода за да изтеглиш приложението на мобилното си
+                  устройство
                 </p>
               </div>
             </div>
@@ -37,15 +37,13 @@ const Banner = () => {
         {/* Right Side: Image */}
         <div className="w-full md:w-1/2 relative h-[300px] md:h-auto self-stretch">
           <img
-            src="/images/banner-refined.png"
+            src="/compressed/banner-refined.png"
             alt="Premium Hair Salon"
             className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
           />
           {/* Overlay to blend image with content */}
-          <div
-            className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent md:block hidden" />
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent md:hidden block" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent md:block hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent md:hidden block" />
         </div>
       </div>
     </div>
