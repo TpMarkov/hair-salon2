@@ -75,8 +75,8 @@ const Navbar = () => {
           <div className="admin-logo-container relative mb-4">
             <img
               className="w-12 md:w-24 cursor-pointer"
-              src={"/images/compressed/logo.png"}
-              alt="admin-logo"
+              src={"/compressed/logo.png"}
+              alt="hair-salon-logo"
               onClick={() => navigate("/")}
             />
             {!sideBarCollapsed && (
