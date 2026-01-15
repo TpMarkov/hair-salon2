@@ -37,7 +37,7 @@ const Banner = () => {
         {/* Right Side: Image */}
         <div className="w-full md:w-1/2 relative h-[300px] md:h-auto self-stretch">
           <img
-            src="/compressed/banner-refined.png"
+            src="/compressed/banner-refined.jpg"
             alt="Premium Hair Salon"
             className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
           />
