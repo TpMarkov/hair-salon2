@@ -130,7 +130,7 @@ const Contact = () => {
             className="relative group overflow-hidden rounded-2xl shadow-xl aspect-[16/9] bg-gray-100"
           >
             <img
-              src="/images/contact_hero.png"
+              src="/images/contact_hero_optimized.png"
               alt="Salon Interior"
               className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
               onLoad={handleImageLoad}

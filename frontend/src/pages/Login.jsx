@@ -84,7 +84,7 @@ const Login = () => {
         {/* Left Side: Image (Hidden on mobile) */}
         <div ref={imageRef} className="hidden lg:block relative h-full min-h-[600px]">
           <img
-            src="/images/login_hero.png"
+            src="/images/login_hero_optimized.png"
             alt="Salon Interior"
             className="absolute inset-0 w-full h-full object-cover"
           />

@@ -21,7 +21,7 @@ const Banner = () => {
               <div className="hidden lg:flex items-center gap-7 bg-white/5 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/10 shadow-2xl">
                 <div className="bg-white p-3 rounded-2xl shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
                   <img
-                    src="/images/qr.png"
+                    src="/images/qr-code.png"
                     alt="Scan to download"
                     className="w-24 h-24 md:w-32 md:h-32 object-contain aspect-square image-rendering-auto"
                   />

@@ -14,7 +14,7 @@ const Header = () => {
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-110"
-        style={{ backgroundImage: "url('/images/hero-bg.png')" }}
+        style={{ backgroundImage: "url('/images/hero_bg_optimized.png')" }}
       />
 
       {/* Gradient Overlay for Readability */}

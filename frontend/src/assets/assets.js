@@ -2,7 +2,7 @@ export const services = [
   {
     serviceId: 1,
     type: "Дамско подстригване",
-    image: "/images/1.jpg",
+    image: "/images/service_female_cut.png",
     fee: 15,
     shortDescription: "Класическо дамско подстригване според формата на лицето.",
     description: "Професионално дамско подстригване, съобразено с формата на лицето, структурата на косата и индивидуалния стил. Включва консултация за подходяща дължина и форма.",
@@ -20,7 +20,7 @@ export const services = [
   {
     serviceId: 3,
     type: "Мъжко подстригване",
-    image: "/images/2.jpg",
+    image: "/images/service_male_cut.png",
     fee: 8,
     shortDescription: "Прецизно и стилно мъжко подстригване.",
     description: "Класическо или модерно мъжко подстригване според предпочитанията на клиента. Подходящо за ежедневна визия или специален повод.",
