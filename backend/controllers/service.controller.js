@@ -78,6 +78,43 @@ const removeService = async (req, res) => {
     }
 }
 
+// API for updating service
+const updateService = async (req, res) => {
+    try {
+        const { id, type, fee, shortDescription, description, duration, filter } = req.body
+
+        if (!id) {
+            return res.json({ success: false, message: "Service ID is required" })
+        }
+
+        const service = await serviceModel.findById(id)
+        if (!service) {
+            return res.json({ success: false, message: "Service not found" })
+        }
+
+        // Update fields if provided
+        // We use || service.field to allow partial updates if needed, 
+        // though the form usually sends everything.
+        // Assuming the form sends the full correct data.
+        const updatedData = {
+            type: type || service.type,
+            fee: fee ? Number(fee) : service.fee,
+            shortDescription: shortDescription || service.shortDescription,
+            description: description || service.description,
+            duration: duration ? Number(duration) : service.duration,
+            filter: filter || service.filter
+        }
+
+        await serviceModel.findByIdAndUpdate(id, updatedData)
+
+        res.json({ success: true, message: "Service Updated" })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
 // API for fetching newest 3 services for ServicesMenu
 const getLatestServices = async (req, res) => {
     try {
@@ -89,4 +126,4 @@ const getLatestServices = async (req, res) => {
     }
 }
 
-export { addService, listServices, removeService, getLatestServices }
+export { addService, listServices, removeService, updateService, getLatestServices }
