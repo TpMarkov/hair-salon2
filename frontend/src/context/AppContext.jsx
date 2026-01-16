@@ -91,6 +91,44 @@ const AppContextProvider = (props) => {
     }
   }, [token])
 
+  // Logout function to clear user session
+  const logout = () => {
+    setToken(false)
+    setUserData(false)
+    setAppointments([])
+    localStorage.removeItem('token')
+  }
+
+  // Handle tab/window close - Desktop browsers
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (token) {
+        logout()
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [token])
+
+  // Handle app close/background - Mobile apps and PWAs
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && token) {
+        logout()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [token])
+
   const value = {
     services,
     latestServices,
@@ -100,7 +138,8 @@ const AppContextProvider = (props) => {
     getLatestServices,
     token, setToken,
     userData, setUserData,
-    loadUserProfileData
+    loadUserProfileData,
+    logout
   }
 
   return (
