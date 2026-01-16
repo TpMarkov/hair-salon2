@@ -4,10 +4,10 @@ import { v2 as cloudinary } from "cloudinary"
 // API for adding service
 const addService = async (req, res) => {
     try {
-        const { type, fee, shortDescription, description, filter } = req.body
+        const { type, fee, shortDescription, description, filter, duration } = req.body
         const imageFile = req.file
 
-        if (!type || !fee || !shortDescription || !description || !filter) {
+        if (!type || !fee || !shortDescription || !description || !filter || !duration) {
             return res.json({ success: false, message: "Missing Details" })
         }
 
@@ -32,6 +32,7 @@ const addService = async (req, res) => {
             fee: Number(fee),
             shortDescription,
             description,
+            duration: Number(duration),
             filter,
             image: imageUrl
         }

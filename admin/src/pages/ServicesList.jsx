@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AdminContext } from "../context/AdminContext.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Upload, PlusCircle, Scissors, Tag, FileText, LayoutList } from 'lucide-react';
+import { Upload, PlusCircle, Scissors, Tag, FileText, LayoutList, Clock } from 'lucide-react';
 
 const ServicesList = () => {
   const { adminToken, backendUrl } = useContext(AdminContext);
@@ -10,6 +10,7 @@ const ServicesList = () => {
   const [serviceImg, setServiceImg] = useState(false);
   const [type, setType] = useState("");
   const [fee, setFee] = useState("");
+  const [duration, setDuration] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [filter, setFilter] = useState("дамско");
@@ -26,6 +27,7 @@ const ServicesList = () => {
       formData.append("image", serviceImg);
       formData.append("type", type);
       formData.append("fee", fee);
+      formData.append("duration", duration);
       formData.append("shortDescription", shortDescription);
       formData.append("description", description);
       formData.append("filter", filter);
@@ -41,6 +43,7 @@ const ServicesList = () => {
         setServiceImg(false);
         setType("");
         setFee("");
+        setDuration("");
         setShortDescription("");
         setDescription("");
       } else {
@@ -160,6 +163,24 @@ const ServicesList = () => {
                       required
                     />
                   </div>
+                </div>
+
+                {/* Service Duration */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    <Clock className="h-4 w-4 text-amber-500" />
+                    Duration (Minutes)
+                  </label>
+                  <input
+                    onChange={(e) => setDuration(e.target.value)}
+                    value={duration}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                    type="number"
+                    min="1"
+                    max="90"
+                    placeholder="30"
+                    required
+                  />
                 </div>
               </div>
 

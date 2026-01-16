@@ -13,11 +13,28 @@ const createAppointment = async (req, res) => {
 
     const existingAppointments = await appointmentModel.find({ slotDate, cancelled: false })
 
-    // Check for overlapping appointments (30-minute slots)
-    const isSlotTaken = existingAppointments.some(appointment => appointment.slotTime === slotTime)
+    // Helper to convert "HH:mm" to minutes from midnight
+    const timeToMinutes = (timeStr) => {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+
+    const newApptStart = timeToMinutes(slotTime);
+    const newApptDuration = serviceData.duration || 30; // Default to 30 if missing (legacy)
+    const newApptEnd = newApptStart + newApptDuration;
+
+    // Check for overlapping appointments
+    const isSlotTaken = existingAppointments.some(appointment => {
+      const existingStart = timeToMinutes(appointment.slotTime);
+      const existingDuration = appointment.serviceData.duration || 30;
+      const existingEnd = existingStart + existingDuration;
+
+      // Check overlap: (StartA < EndB) and (EndA > StartB)
+      return (newApptStart < existingEnd && newApptEnd > existingStart);
+    });
 
     if (isSlotTaken) {
-      return res.json({ success: false, message: "This slot is already booked" })
+      return res.json({ success: false, message: "This time slot is unavailable due to an overlap." })
     }
 
     const appointmentData = {

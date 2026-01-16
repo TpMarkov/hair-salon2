@@ -62,7 +62,7 @@ const Service = () => {
 
   const getAvailableSlots = async () => {
     setTimeSlots([]);
-    setSlotTime(""); // Reset selected time when date changes (if you prefer)
+    setSlotTime(""); // Reset selected time when date changes
 
     if (!date) return;
 
@@ -70,11 +70,8 @@ const Service = () => {
     let currentDate = new Date(date);
     let dayOfWeek = currentDate.getDay(); // 0 = Sun, 6 = Sat
 
-    // Check if weekend (if you want to disable checking logic or just rely on Calendar disabled days)
-    // Note: If you disable days in Calendar, this function won't be called for them usually, 
-    // but good to keep safe.
+    // Check if weekend
     if (dayOfWeek === 0 || dayOfWeek === 6) {
-      // Weekend - no slots
       return;
     }
 
@@ -86,18 +83,18 @@ const Service = () => {
     let slotTimePointer = new Date(currentDate);
     const today = new Date();
 
-    // Check if selected date is "today" (compare dates)
+    // Check if selected date is "today"
     const isToday =
       today.getDate() === currentDate.getDate() &&
       today.getMonth() === currentDate.getMonth() &&
       today.getFullYear() === currentDate.getFullYear();
 
     if (isToday) {
-      // If today, start from now (rounded to next 30 min), but not before 10 AM
       const now = new Date();
       let startHour = now.getHours();
       let startMin = now.getMinutes();
 
+      // Round to next 30 minutes
       if (startMin > 30) {
         startHour += 1;
         startMin = 0;
@@ -116,10 +113,26 @@ const Service = () => {
     }
 
     let slots = [];
+    const serviceDuration = service.duration || 30; // Minutes
+
+    // Calculate start/end minutes for booked slots
+    const bookedintervals = bookedSlots.map((booking) => {
+      if (booking.slotDate !== currentDate.getDate() + "_" + (currentDate.getMonth() + 1) + "_" + currentDate.getFullYear()) return null;
+
+      const [hours, minutes] = booking.slotTime.split(':').map(Number);
+      const startMins = hours * 60 + minutes;
+      const duration = booking.serviceData.duration || 30;
+
+      return {
+        start: startMins,
+        end: startMins + duration
+      };
+    }).filter(Boolean);
+
+
     while (slotTimePointer < workingDayEnd) {
-      // If pointer is past working hours due to "now", loop won't run.
-      // But also check if slotTimePointer is actually in the future if it is today.
-      // (The startHour logic handles most, but let's be safe)
+      // Logic for "today" to skip past times happens via the init logic mostly, 
+      // but loop check is good too
       if (isToday && slotTimePointer < new Date()) {
         slotTimePointer.setMinutes(slotTimePointer.getMinutes() + 30);
         continue;
@@ -131,18 +144,21 @@ const Service = () => {
         hour12: false,
       });
 
-      let day = slotTimePointer.getDate();
-      let month = slotTimePointer.getMonth() + 1;
-      let year = slotTimePointer.getFullYear();
+      // Convert pointer to minutes from midnight
+      const currentStartMins = slotTimePointer.getHours() * 60 + slotTimePointer.getMinutes();
+      const currentEndMins = currentStartMins + serviceDuration;
 
-      const slotDate = day + "_" + month + "_" + year;
+      // Check if this proposed slot fits within working hours (e.g. 19:00 IS end, so 18:45 for 20min service is ok, but not for 30min?)
+      // workingDayEnd is 19:00. 
+      const workingEndMins = 19 * 60;
+      if (currentEndMins > workingEndMins) {
+        break; // Stop if service exceeds working hours
+      }
 
-      // Check if slot is available
-      const isSlotAvailable = bookedSlots.every((booking) => {
-        if (booking.slotDate === slotDate) {
-          return booking.slotTime !== formattedTime;
-        }
-        return true;
+      // Check collision
+      const isSlotAvailable = bookedintervals.every((booking) => {
+        // Collision: (StartA < EndB) && (EndA > StartB)
+        return !(currentStartMins < booking.end && currentEndMins > booking.start);
       });
 
       if (isSlotAvailable) {
@@ -152,7 +168,7 @@ const Service = () => {
         });
       }
 
-      // Update next slot by 30 mins
+      // Increment by 30 mins
       slotTimePointer.setMinutes(slotTimePointer.getMinutes() + 30);
     }
 
@@ -319,8 +335,8 @@ const Service = () => {
                     key={index}
                     onClick={() => setSlotTime(item.time)}
                     className={`text-sm font-bold shrink-0 px-6 py-3 rounded-xl cursor-pointer transition-all duration-300 border ${item.time === slotTime
-                        ? "bg-gradient-to-r from-amber-400 to-amber-600 border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
-                        : "bg-white border-gray-100 text-gray-500 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-600 border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
+                      : "bg-white border-gray-100 text-gray-500 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
                       }`}
                   >
                     {item.time}
@@ -353,8 +369,8 @@ const Service = () => {
             onClick={bookAppointment}
             disabled={!slotTime}
             className={`group relative flex items-center justify-center gap-3 px-12 py-5 rounded-2xl text-white font-black text-lg transition-all duration-300 overflow-hidden ${slotTime
-                ? "bg-gradient-to-r from-amber-400 to-amber-600 shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              ? "bg-gradient-to-r from-amber-400 to-amber-600 shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
           >
             <span>Запази час</span>
