@@ -10,7 +10,7 @@ const AppContextProvider = (props) => {
   const [appointments, setAppointments] = useState([])
   const [services, setServices] = useState([])
   const [latestServices, setLatestServices] = useState([])
-  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
+  const [token, setToken] = useState(sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false)
   const [userData, setUserData] = useState(false)
 
 
@@ -91,73 +91,14 @@ const AppContextProvider = (props) => {
     }
   }, [token])
 
-  // Logout function to clear user session
   const logout = () => {
     setToken(false)
     setUserData(false)
     setAppointments([])
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
   }
 
-  // Detect if running on mobile device or in WebView (Android APK)
-  const isMobileOrWebView = () => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase())
-    const isWebView = /wv|webview/i.test(userAgent.toLowerCase())
-    return isMobile || isWebView
-  }
 
-  // Enhanced auto-logout for mobile apps and browsers
-  useEffect(() => {
-    if (!token) return
-
-    const mobile = isMobileOrWebView()
-
-    // Handler for visibility change (primary for mobile/PWA/Android APK)
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        logout()
-      }
-    }
-
-    // Handler for page hide (fires when navigating away or closing)
-    const handlePageHide = () => {
-      logout()
-    }
-
-    // Handler for window blur (fires when window loses focus)
-    const handleBlur = () => {
-      if (mobile) {
-        // On mobile, blur often means app is backgrounding
-        logout()
-      }
-    }
-
-    // Handler for beforeunload (desktop browsers)
-    const handleBeforeUnload = () => {
-      logout()
-    }
-
-    // Add all event listeners
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('pagehide', handlePageHide)
-
-    if (mobile) {
-      // For mobile devices, add blur listener for additional coverage
-      window.addEventListener('blur', handleBlur)
-    }
-
-    // Always add beforeunload for desktop compatibility
-    window.addEventListener('beforeunload', handleBeforeUnload)
-
-    // Cleanup function
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('pagehide', handlePageHide)
-      window.removeEventListener('blur', handleBlur)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [token])
 
 
   const value = {
