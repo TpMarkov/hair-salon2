@@ -17,19 +17,21 @@ const Banner = () => {
               професионална грижа за твоята коса.
             </p>
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="hidden lg:flex items-center gap-7 bg-white/5 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/10 shadow-2xl">
-                <div className="bg-white p-3 rounded-2xl shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
-                  <img
-                    src="/images/qr-code.png"
-                    alt="Scan to download"
-                    className="w-24 h-24 md:w-32 md:h-32 object-contain aspect-square image-rendering-auto"
-                  />
+              {import.meta.env.VITE_APP_BUNDLE !== 'BASIC' && (
+                <div className="hidden lg:flex items-center gap-7 bg-white/5 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/10 shadow-2xl">
+                  <div className="bg-white p-3 rounded-2xl shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
+                    <img
+                      src="/images/qr-code.png"
+                      alt="Scan to download"
+                      className="w-24 h-24 md:w-32 md:h-32 object-contain aspect-square image-rendering-auto"
+                    />
+                  </div>
+                  <p className="text-gray-200 text-lg font-bold leading-snug max-w-[200px]">
+                    Сканирай QR кода за да изтеглиш приложението на мобилното си
+                    устройство
+                  </p>
                 </div>
-                <p className="text-gray-200 text-lg font-bold leading-snug max-w-[200px]">
-                  Сканирай QR кода за да изтеглиш приложението на мобилното си
-                  устройство
-                </p>
-              </div>
+              )}
             </div>
           </div>
         </div>

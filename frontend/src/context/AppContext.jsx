@@ -77,12 +77,20 @@ const AppContextProvider = (props) => {
   }
 
   useEffect(() => {
-    getServicesData()
-    getLatestServices()
+    if (import.meta.env.VITE_APP_BUNDLE === 'BASIC') {
+      // In BASIC mode, use static data
+      import('../assets/assets.js').then(module => {
+        setServices(module.services)
+      })
+      // No latest services or user profile to load
+    } else {
+      getServicesData()
+      getLatestServices()
+    }
   }, [])
 
   useEffect(() => {
-    if (token) {
+    if (token && import.meta.env.VITE_APP_BUNDLE !== 'BASIC') {
       loadUserProfileData()
       getAppointments()
     } else {

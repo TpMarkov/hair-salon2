@@ -62,7 +62,10 @@ const Navbar = () => {
       </div>
       <ul className={`hidden md:flex items-start gap-5 font-medium`}>
         {navLinks
-          .filter((link) => (token ? true : link.title !== "Моите часове"))
+          .filter((link) => {
+            if (import.meta.env.VITE_APP_BUNDLE === 'BASIC') return link.title !== "Моите часове";
+            return token ? true : link.title !== "Моите часове"
+          })
           .map((navlink, index) => (
             <li key={index} className="uppercase tracking-tight">
               <NavLink
@@ -129,14 +132,16 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <button
-            onClick={() => navigate("/login")}
-            className={
-              "bg-primary-gradient text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"
-            }
-          >
-            Вход / Регистрация{" "}
-          </button>
+          import.meta.env.VITE_APP_BUNDLE !== 'BASIC' && (
+            <button
+              onClick={() => navigate("/login")}
+              className={
+                "bg-primary-gradient text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"
+              }
+            >
+              Вход / Регистрация{" "}
+            </button>
+          )
         )}
 
         {/* Burger Menu Icon (Mobile Only) */}
@@ -174,7 +179,10 @@ const Navbar = () => {
         {/* Menu Links */}
         <nav className="flex-1 flex flex-col items-center justify-center py-12 gap-8 px-6">
           {navLinks
-            .filter((link) => (token ? true : link.title !== "Моите часове"))
+            .filter((link) => {
+              if (import.meta.env.VITE_APP_BUNDLE === 'BASIC') return link.title !== "Моите часове";
+              return token ? true : link.title !== "Моите часове"
+            })
             .map((link, index) => (
               <NavLink
                 key={index}
@@ -191,7 +199,7 @@ const Navbar = () => {
               </NavLink>
             ))}
 
-          {!token && (
+          {(!token && import.meta.env.VITE_APP_BUNDLE !== 'BASIC') && (
             <button
               onClick={() => {
                 navigate("/login");

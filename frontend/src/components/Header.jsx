@@ -54,14 +54,29 @@ const Header = () => {
             />
           </a>
         ) : (
-          <button
-            onClick={() => navigate("/login")}
-            className={
-              "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
-            }
-          >
-            Регистрирай се
-          </button>
+          import.meta.env.VITE_APP_BUNDLE === 'BASIC' ? (
+            <a
+              href="#services"
+              className={
+                "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
+              }
+            >
+              Услуги
+              <ChevronRight
+                className="group-hover:translate-x-1 transition-transform"
+                size={24}
+              />
+            </a>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className={
+                "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
+              }
+            >
+              Регистрирай се
+            </button>
+          )
         )}
       </div>
     </div>

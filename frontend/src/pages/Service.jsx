@@ -40,6 +40,8 @@ const Service = () => {
   };
 
   useEffect(() => {
+    if (import.meta.env.VITE_APP_BUNDLE === 'BASIC') return;
+
     fetchBookedSlots();
 
     // Socket implementation for production
@@ -269,119 +271,136 @@ const Service = () => {
       </div>
 
       {/* Booking Section */}
-      <div className="mt-12 bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
-        <div className="p-8 bg-gray-50 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-white border border-gray-200 rounded-2xl shadow-sm">
-              <CalendarIcon className="text-amber-500" size={24} />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-1 tracking-tight ">
-                Запазете своя <span className="text-amber-500">час</span>
-              </h3>
-              <p className="text-gray-500 text-sm italic">
-                Изберете най-удобното време за посещение
-              </p>
-            </div>
-          </div>
-          {slotTime && (
-            <div className="flex items-center gap-2 bg-white border border-amber-200 px-4 py-2 rounded-xl text-amber-600 shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
-              <Clock size={16} className="text-amber-500" />
-              <span className="text-gray-600 text-sm font-medium">
-                Избран час:
-              </span>
-              <span className="text-gray-900 font-bold">{slotTime}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Days Selection (Calendar) */}
-          <div className="flex flex-col items-center">
-            <label className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] mb-4 block w-full text-left ml-2">
-              1. ИЗБЕРЕТЕ ДАТА
-            </label>
-            <div className="flex justify-center bg-white border border-gray-100 rounded-2xl p-4 shadow-sm w-fit">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                locale={bg}
-                disabled={isDateDisabled}
-                className="rounded-md"
-                classNames={{
-                  head_cell: "text-muted-foreground w-10 font-normal text-[0.8rem] text-gray-500",
-                  cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-amber-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                  day: "h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-gray-100 rounded-md transition-colors text-gray-700",
-                  day_selected: "!bg-amber-500 !text-white hover:bg-amber-600 hover:text-white focus:bg-amber-600 focus:text-white shadow-lg shadow-amber-500/20",
-                  day_today: "bg-gray-100 text-amber-600 font-bold border border-amber-200/50",
-                  day_outside: "text-gray-300 opacity-50",
-                  day_disabled: "text-gray-300 opacity-30",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Time Selection */}
-          <div className="flex flex-col">
-            <label className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] mb-4 block">
-              2. НАЛИЧНИ ЧАСОВЕ {date && `ЗА ${date.toLocaleDateString('bg-BG')}`}
-            </label>
-
-            <div className="flex flex-wrap gap-3 max-h-[400px] overflow-y-auto content-start pr-2 custom-scrollbar">
-              {timeSlots.length > 0 ? (
-                timeSlots.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSlotTime(item.time)}
-                    className={`text-sm font-bold shrink-0 px-6 py-3 rounded-xl cursor-pointer transition-all duration-300 border ${item.time === slotTime
-                      ? "bg-gradient-to-r from-amber-400 to-amber-600 border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
-                      : "bg-white border-gray-100 text-gray-500 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
-                      }`}
-                  >
-                    {item.time}
-                  </button>
-                ))
-              ) : (
-                <div className="w-full flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
-                  <Clock className="text-gray-300 mb-2" size={32} />
-                  <p className="text-gray-400 italic">
-                    {date && (date.getDay() === 0 || date.getDay() === 6)
-                      ? "Салонът не работи през уикенда."
-                      : "Няма свободни часове за тази дата."}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Action */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-gray-50 border-t border-gray-200">
-          <div className="text-center sm:text-left">
-            <p className="text-gray-400 text-[10px] uppercase font-black tracking-widest mb-1">
-              Обща цена
-            </p>
-            <p className="text-4xl font-black text-gray-800">{service.fee}€</p>
-          </div>
-
+      {import.meta.env.VITE_APP_BUNDLE === 'BASIC' ? (
+        <div className="mt-12 bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200 p-8 text-center">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            Искате да запазите час?
+          </h3>
+          <p className="text-gray-500 mb-6">
+            Моля, свържете се с нас директно, за да запазите своя час за тази услуга.
+          </p>
           <button
-            onClick={bookAppointment}
-            disabled={!slotTime}
-            className={`group relative flex items-center justify-center gap-3 px-12 py-5 rounded-2xl text-white font-black text-lg transition-all duration-300 overflow-hidden ${slotTime
-              ? "bg-gradient-to-r from-amber-400 to-amber-600 shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
+            onClick={() => navigate('/contacts')}
+            className="bg-primary-gradient text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-amber-500/30 hover:scale-105 transition-transform"
           >
-            <span>Запази час</span>
-            <ChevronRight
-              size={20}
-              className={`transition-transform duration-300 ${slotTime ? "group-hover:translate-x-1" : "opacity-30"
-                }`}
-            />
+            Към Контакти
           </button>
         </div>
-      </div>
+      ) : (
+        <div className="mt-12 bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+          <div className="p-8 bg-gray-50 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                <CalendarIcon className="text-amber-500" size={24} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-1 tracking-tight ">
+                  Запазете своя <span className="text-amber-500">час</span>
+                </h3>
+                <p className="text-gray-500 text-sm italic">
+                  Изберете най-удобното време за посещение
+                </p>
+              </div>
+            </div>
+            {slotTime && (
+              <div className="flex items-center gap-2 bg-white border border-amber-200 px-4 py-2 rounded-xl text-amber-600 shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
+                <Clock size={16} className="text-amber-500" />
+                <span className="text-gray-600 text-sm font-medium">
+                  Избран час:
+                </span>
+                <span className="text-gray-900 font-bold">{slotTime}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Days Selection (Calendar) */}
+            <div className="flex flex-col items-center">
+              <label className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] mb-4 block w-full text-left ml-2">
+                1. ИЗБЕРЕТЕ ДАТА
+              </label>
+              <div className="flex justify-center bg-white border border-gray-100 rounded-2xl p-4 shadow-sm w-fit">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  locale={bg}
+                  disabled={isDateDisabled}
+                  className="rounded-md"
+                  classNames={{
+                    head_cell: "text-muted-foreground w-10 font-normal text-[0.8rem] text-gray-500",
+                    cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-amber-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                    day: "h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-gray-100 rounded-md transition-colors text-gray-700",
+                    day_selected: "!bg-amber-500 !text-white hover:bg-amber-600 hover:text-white focus:bg-amber-600 focus:text-white shadow-lg shadow-amber-500/20",
+                    day_today: "bg-gray-100 text-amber-600 font-bold border border-amber-200/50",
+                    day_outside: "text-gray-300 opacity-50",
+                    day_disabled: "text-gray-300 opacity-30",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Time Selection */}
+            <div className="flex flex-col">
+              <label className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] mb-4 block">
+                2. НАЛИЧНИ ЧАСОВЕ {date && `ЗА ${date.toLocaleDateString('bg-BG')}`}
+              </label>
+
+              <div className="flex flex-wrap gap-3 max-h-[400px] overflow-y-auto content-start pr-2 custom-scrollbar">
+                {timeSlots.length > 0 ? (
+                  timeSlots.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSlotTime(item.time)}
+                      className={`text-sm font-bold shrink-0 px-6 py-3 rounded-xl cursor-pointer transition-all duration-300 border ${item.time === slotTime
+                        ? "bg-gradient-to-r from-amber-400 to-amber-600 border-transparent text-white shadow-lg shadow-amber-500/20 scale-105"
+                        : "bg-white border-gray-100 text-gray-500 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+                        }`}
+                    >
+                      {item.time}
+                    </button>
+                  ))
+                ) : (
+                  <div className="w-full flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
+                    <Clock className="text-gray-300 mb-2" size={32} />
+                    <p className="text-gray-400 italic">
+                      {date && (date.getDay() === 0 || date.getDay() === 6)
+                        ? "Салонът не работи през уикенда."
+                        : "Няма свободни часове за тази дата."}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-gray-50 border-t border-gray-200">
+            <div className="text-center sm:text-left">
+              <p className="text-gray-400 text-[10px] uppercase font-black tracking-widest mb-1">
+                Обща цена
+              </p>
+              <p className="text-4xl font-black text-gray-800">{service.fee}€</p>
+            </div>
+
+            <button
+              onClick={bookAppointment}
+              disabled={!slotTime}
+              className={`group relative flex items-center justify-center gap-3 px-12 py-5 rounded-2xl text-white font-black text-lg transition-all duration-300 overflow-hidden ${slotTime
+                ? "bg-gradient-to-r from-amber-400 to-amber-600 shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+            >
+              <span>Запази час</span>
+              <ChevronRight
+                size={20}
+                className={`transition-transform duration-300 ${slotTime ? "group-hover:translate-x-1" : "opacity-30"
+                  }`}
+              />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

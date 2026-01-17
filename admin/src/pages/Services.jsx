@@ -107,26 +107,28 @@ const Services = () => {
                 src={item.image}
                 alt=""
               />
-              <div className="absolute top-2 right-2 flex gap-2">
-                <button
-                  className="bg-white rounded-full p-2 shadow hover:bg-amber-50 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    startEditing(item);
-                  }}
-                >
-                  <Pencil className="w-4 h-4 text-amber-500" />
-                </button>
-                <button
-                  className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteService(item._id);
-                  }}
-                >
-                  <Trash2 className="w-4 h-4 text-red-500" />
-                </button>
-              </div>
+              {import.meta.env.VITE_APP_BUNDLE !== 'STANDARD' && (
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <button
+                    className="bg-white rounded-full p-2 shadow hover:bg-amber-50 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startEditing(item);
+                    }}
+                  >
+                    <Pencil className="w-4 h-4 text-amber-500" />
+                  </button>
+                  <button
+                    className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteService(item._id);
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4 text-red-500" />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="p-4">
               <div className="flex justify-between items-center mb-2">

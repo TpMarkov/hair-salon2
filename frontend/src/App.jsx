@@ -39,12 +39,16 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contacts" element={<Contact />} />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/my-appointments" element={<MyAppointments />} />
-          <Route path="/my-profile" element={<MyProfile />} />
-          <Route path="/services-list" element={<ServicesList />} />
           <Route path="/service/:type" element={<Service />} />
-          <Route path="/appointment/:type" element={<Appointment />} />
+          {import.meta.env.VITE_APP_BUNDLE !== 'BASIC' && (
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/my-appointments" element={<MyAppointments />} />
+              <Route path="/my-profile" element={<MyProfile />} />
+              <Route path="/services-list" element={<ServicesList />} />
+              <Route path="/appointment/:type" element={<Appointment />} />
+            </>
+          )}
         </Routes>
       </Suspense>
       <Footer />
