@@ -10,6 +10,10 @@ import {
   Twitter,
 } from "lucide-react";
 
+//DOTO : Change the adress 
+export const GOOGLE_ADRESS = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23459.15176869298!2d23.284390186610715!3d42.69537808798742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa856dd1517c85%3A0xffb5a61b370ddfaa!2sSofia%20Center%2C%20Sofia%2C%20Bulgaria!5e0!3m2!1sen!2sus!4v1768722995853!5m2!1sen!2sus"
+
+
 const Footer = () => {
   const navigate = useNavigate();
 
@@ -112,12 +116,19 @@ const Footer = () => {
               </span>
             </li>
             <li className="flex items-center gap-3 text-gray-500 group">
-              <div className="p-2 bg-stone-50 rounded-lg group-hover:bg-yellow-50 group-hover:text-yellow-600 transition-colors">
-                <MapPin size={18} />
-              </div>
-              <span className="group-hover:text-gray-800 transition-colors">
-                ул. „Примерна“ 123, София
-              </span>
+              <a
+                href="https://www.google.com/maps/place/Sofia+Center,+Sofia,+Bulgaria/@42.6953781,23.2843902,14z/data=!3m1!4b1!4m6!3m5!1s0x40aa856dd1517c85:0xffb5a61b370ddfaa!8m2!3d42.697705!4d23.3217462!16s%2Fg%2F1yg58mm81?hl=en&entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 hover:text-yellow-600 transition-colors"
+              >
+                <div className="p-2 bg-stone-50 rounded-lg group-hover:bg-yellow-50 group-hover:text-yellow-600 transition-colors">
+                  <MapPin size={18} />
+                </div>
+                <span className="group-hover:text-gray-800 transition-colors">
+                  ж.к. Разсадника - Коньовица
+                </span>
+              </a>
             </li>
           </ul>
         </div>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import emailjs from "@emailjs/browser";
+import GoogleMap from "../components/GoogleMap";
+import { GOOGLE_ADRESS } from "../components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -148,7 +150,7 @@ const Contact = () => {
               <div className="space-y-2 text-gray-600">
                 <p className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-yellow-500 rounded-full" />
-                  ул. „Примерна“ 123, София
+                  ул. „Юрий Гагарин“, Ловеч
                 </p>
                 <p className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-yellow-500 rounded-full" />
@@ -170,6 +172,14 @@ const Contact = () => {
                 <p>Събота: 10:00 - 18:00</p>
                 <p>Неделя: Почивен ден</p>
               </div>
+            </div>
+
+            {/* Google Map Widget */}
+            <div className="md:col-span-2 mt-4 space-y-4">
+              <h3 className="text-xl font-semibold text-gray-800">
+                Намерете ни
+              </h3>
+              <GoogleMap height="300px" src={GOOGLE_ADRESS} />
             </div>
 
             <div className="md:col-span-2 pt-4">
