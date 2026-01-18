@@ -32,7 +32,7 @@ const Header = () => {
 
         {/* Optimized SEO */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-          Фризьорски салон в <span className="text-gold">Ловеч</span>
+          Фризьорски салон в <span className="text-gold">София</span>
           <br />
           професионална грижа за вашата коса
         </h1>
@@ -53,30 +53,28 @@ const Header = () => {
               size={24}
             />
           </a>
+        ) : import.meta.env.VITE_APP_BUNDLE === "BASIC" ? (
+          <a
+            href="#services"
+            className={
+              "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
+            }
+          >
+            Услуги
+            <ChevronRight
+              className="group-hover:translate-x-1 transition-transform"
+              size={24}
+            />
+          </a>
         ) : (
-          import.meta.env.VITE_APP_BUNDLE === 'BASIC' ? (
-            <a
-              href="#services"
-              className={
-                "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
-              }
-            >
-              Услуги
-              <ChevronRight
-                className="group-hover:translate-x-1 transition-transform"
-                size={24}
-              />
-            </a>
-          ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className={
-                "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
-              }
-            >
-              Регистрирай се
-            </button>
-          )
+          <button
+            onClick={() => navigate("/login")}
+            className={
+              "group flex items-center gap-3 bg-primary-gradient px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-amber-500/30 transition-all active:scale-95"
+            }
+          >
+            Регистрирай се
+          </button>
         )}
       </div>
     </div>

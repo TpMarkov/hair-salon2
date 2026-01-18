@@ -17,11 +17,11 @@ const ServicesMenu = () => {
     <section className="py-20 px-6 max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-gold text-4xl md:text-5xl font-bold mb-4">
-          Най-популярни фризьорски услуги в Ловеч
+          Най-популярни фризьорски услуги в София
         </h2>
 
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          Открий най-търсените фризьорски услуги в Ловеч – подстригване,
+          Открий най-търсените фризьорски услуги в София – подстригване,
           боядисване и терапии за коса.
         </p>
       </div>
@@ -37,7 +37,7 @@ const ServicesMenu = () => {
               <div className="overflow-hidden rounded-2xl aspect-[4/5] mb-6 shadow-2xl transition-all duration-500 group-hover:shadow-gold/20 group-hover:-translate-y-2">
                 <img
                   src={optimizeImageUrl(service.image)}
-                  alt={`${service.type} в Ловеч – фризьорски салон`}
+                  alt={`${service.type} в София – фризьорски салон`}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
