@@ -1,4 +1,5 @@
 const Banner = () => {
+  console.log("This is banner")
   return (
     <div className="relative overflow-hidden bg-black/60 w-[calc(100%+2.5rem)] mx-[-1.25rem] my-24 group">
       {/* Background Gradient */}
