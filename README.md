@@ -84,7 +84,7 @@ Captured from the live application:
     </td>
     <td align="center" width="50%">
       <b>Services View</b><br>
-      <img src="https://i.ibb.co/Hf3Rp4Hb/image3.png" width="100%" alt="Services View">
+      <img src="https://i.ibb.co/xtsmm5kZ/all-services-png.png" width="100%" alt="Services View">
     </td>
   </tr>
   <tr>
