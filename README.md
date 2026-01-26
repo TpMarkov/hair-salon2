@@ -80,7 +80,7 @@ Captured from the live application:
   <tr>
     <td align="center" width="50%">
       <b>Booking Interface</b><br>
-      <img src="https://i.ibb.co/k2gTXFr1/home.png" width="100%" alt="Booking Interface">
+      <img src="https://i.ibb.co/jZvmWGHJ/Untitled.png" width="100%" alt="Booking Interface">
     </td>
     <td align="center" width="50%">
       <b>Services View</b><br>
