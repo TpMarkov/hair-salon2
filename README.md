@@ -94,7 +94,7 @@ Captured from the live application:
     </td>
     <td align="center" width="50%">
       <b>Schedule Management</b><br>
-      <img src="https://i.ibb.co/bj13vZbW/image2.png" width="100%" alt="Schedule Management">
+      <img src="https://i.ibb.co/yFKq7Ygx/appointments.png" width="100%" alt="Schedule Management">
     </td>
   </tr>
 </table>
