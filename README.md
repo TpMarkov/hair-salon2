@@ -1,6 +1,6 @@
 # Hair Salon Management System 💇‍♀️
 
-![Banner](https://i.ibb.co/ym0Rk14f/image2.png)
+![Banner](https://i.ibb.co/zV3c18mg/large-barnner.png)
 
 A modern **full-stack Hair Salon Management System** that enables customers to book appointments online while salon owners manage services, staff, and schedules through a powerful admin dashboard.
 
