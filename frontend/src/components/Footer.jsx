@@ -10,9 +10,9 @@ import {
   Twitter,
 } from "lucide-react";
 
-//DOTO : Change the adress 
-export const GOOGLE_ADRESS = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23459.15176869298!2d23.284390186610715!3d42.69537808798742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa856dd1517c85%3A0xffb5a61b370ddfaa!2sSofia%20Center%2C%20Sofia%2C%20Bulgaria!5e0!3m2!1sen!2sus!4v1768722995853!5m2!1sen!2sus"
-
+//DOTO : Change the adress
+export const GOOGLE_ADRESS =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23459.15176869298!2d23.284390186610715!3d42.69537808798742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa856dd1517c85%3A0xffb5a61b370ddfaa!2sSofia%20Center%2C%20Sofia%2C%20Bulgaria!5e0!3m2!1sen!2sus!4v1768722995853!5m2!1sen!2sus";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Footer = () => {
           </p>
           <div className="flex gap-4">
             <a
-              href="https://www.facebook.com/profile.php?id=61553067962651"
+              href="https://google.com"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Посетете нашата Facebook страница"
@@ -52,7 +52,7 @@ const Footer = () => {
               <Facebook size={20} />
             </a>
             <a
-              href="https://www.instagram.com/markowcvetan?igsh=MnN1aTB6bWxtd2w4"
+              href="https://google.com"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Посетете нашия Instagram профил"
@@ -61,7 +61,7 @@ const Footer = () => {
               <Instagram size={20} />
             </a>
             <a
-              href="https://www.facebook.com/profile.php?id=61553067962651"
+              href="htts://google.com"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Посетете профила ни в Twitter"
