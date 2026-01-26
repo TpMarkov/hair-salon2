@@ -90,7 +90,7 @@ Captured from the live application:
   <tr>
     <td align="center" width="50%">
       <b>Admin Dashboard</b><br>
-      <img src="https://i.ibb.co/1fkLHK2W/image1.png" width="100%" alt="Admin Dashboard">
+      <img src="https://i.ibb.co/N2fmPgg2/admin-dashboard.png" width="100%" alt="Admin Dashboard">
     </td>
     <td align="center" width="50%">
       <b>Schedule Management</b><br>
